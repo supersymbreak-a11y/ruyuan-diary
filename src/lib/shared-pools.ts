@@ -30,7 +30,7 @@ type SharedPoolRow = {
   createdAt: string;
 };
 
-export const listSharedPools = createServerFn({ method: "GET" }).handler(async () => {
+const listSharedPoolsServer = createServerFn({ method: "GET" }).handler(async () => {
   const { getSql } = await import("./db");
   const sql = await getSql();
   return sql<SharedPoolRow>`
@@ -50,7 +50,7 @@ export const listSharedPools = createServerFn({ method: "GET" }).handler(async (
   `;
 });
 
-export const saveSharedPool = createServerFn({ method: "POST" })
+const saveSharedPoolServer = createServerFn({ method: "POST" })
   .validator(sharedPoolSchema)
   .handler(async ({ data }) => {
     const { getSql } = await import("./db");
@@ -78,6 +78,32 @@ export const saveSharedPool = createServerFn({ method: "POST" })
     `;
     return { ok: true };
   });
+
+const SHARED_POOLS_API_URL =
+  (import.meta.env.VITE_SHARED_POOLS_API_URL as string | undefined)?.replace(/\/$/, "")
+  ?? "https://ruyuan-diary-pools-api.supersymbreak.workers.dev";
+
+export async function listSharedPools(): Promise<SharedPoolRow[]> {
+  if (SHARED_POOLS_API_URL) {
+    const response = await fetch(`${SHARED_POOLS_API_URL}/pools`);
+    if (!response.ok) throw new Error(`公共卡池读取失败（${response.status}）`);
+    return (await response.json()) as SharedPoolRow[];
+  }
+  return listSharedPoolsServer();
+}
+
+export async function saveSharedPool({ data }: { data: SharedPoolDefinition }): Promise<{ ok: true }> {
+  if (SHARED_POOLS_API_URL) {
+    const response = await fetch(`${SHARED_POOLS_API_URL}/pools`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error(`公共卡池保存失败（${response.status}）`);
+    return (await response.json()) as { ok: true };
+  }
+  return saveSharedPoolServer({ data });
+}
 
 export function toSharedPool(pool: Pool): SharedPoolDefinition {
   return {
