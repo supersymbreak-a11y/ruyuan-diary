@@ -248,7 +248,11 @@ export function portraitSrc(name: string) {
       "郭女王": "/portraits/guo-nvwang.png",
       "庞德": "/portraits/pang-de.png",
     };
-  if (bundledPortraits[safeName]) return bundledPortraits[safeName];
+  if (bundledPortraits[safeName]) {
+    // Public assets live under the Vite base path on GitHub Pages
+    // (`/ruyuan-diary/`), while local development uses `/`.
+    return `${import.meta.env.BASE_URL}${bundledPortraits[safeName].slice(1)}`;
+  }
   const hue = Array.from(safeName).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 360;
   const initial = safeName.slice(0, 1);
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(${hue} 38% 30%)"/><stop offset="1" stop-color="hsl(${(hue + 42) % 360} 48% 58%)"/></linearGradient></defs><rect width="300" height="400" fill="url(#g)"/><circle cx="150" cy="142" r="72" fill="hsl(${hue} 28% 78% / .75)"/><path d="M56 382c10-95 57-143 94-143s84 48 94 143" fill="hsl(${hue} 24% 88% / .86)"/><text x="150" y="166" text-anchor="middle" font-size="72" font-family="serif" fill="hsl(${hue} 42% 24%)">${initial}</text><path d="M24 24h252v352H24z" fill="none" stroke="#d49a22" stroke-width="8"/></svg>`;
