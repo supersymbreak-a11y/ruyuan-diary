@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { BackupNavItem } from "./backup-nav";
 
 export function HydrateGate({ children }: { children: ReactNode }) {
+  if (import.meta.env.MODE === "github-pages") return <>{children}</>;
+
   const [hydrated, setHydrated] = useState(() => useNotes.persist.hasHydrated());
 
   useEffect(() => {
