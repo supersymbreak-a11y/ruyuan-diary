@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", system-ui, sans-serif;
+
+  --color-cream: #f6e9c9;
+  --color-cream-deep: #eddbb0;
+  --color-wash-top: #f8efd8;
+  --color-wash-mid: #f3dca8;
+  --color-wash-bot: #efd19a;
+  --color-card: #fffefb;
+  --color-gold: #c4a046;
+  --color-gold-bar: #d4b056;
+  --color-gold-deep: #a8842e;
+  --color-brown: #7a5a1e;
+  --color-brown-deep: #5c4214;
+  --color-ink: #2c2416;
+  --color-hint: #b08940;
+  --color-line: #ead9b0;
+  --color-highlight: #f6e7c2;
+  --color-stat-purple: #6f82e0;
+  --color-stat-purple-bg: #eef0fb;
+  --color-stat-red: #e07070;
+  --color-stat-red-bg: #fbeeee;
+  --color-stat-gold: #e0b34a;
+  --color-stat-gold-bg: #f8f0dc;
+  --color-edit: #c9a54a;
+  --color-banner: #16120c;
+  --color-muted-fg: #9a7a3a;
+
+  --color-gain: #2f9e5c;
+  --color-loss: #e05656;
+  --color-mat-gold: #d4a21b;
+  --color-mat-gold-bg: #fff6d4;
+  --color-mat-blue: #2b8fdb;
+  --color-mat-blue-bg: #e7f4ff;
+  --color-mat-green: #3daa62;
+  --color-mat-green-bg: #e5f6ea;
+  --color-mat-rose: #ee6e6e;
+  --color-mat-rose-bg: #fdeced;
+  --color-chart-1: #2196f3;
+  --color-chart-2: #8bcf6b;
+  --color-chart-3: #ffc857;
+  --color-chart-4: #ef6268;
+  --color-chart-5: #6db7d4;
+  --color-chart-6: #3d8b6e;
+  --color-chart-7: #f59e4c;
+  --color-chart-8: #a78bfa;
+  --color-chart-9: #f472b6;
+  --color-chart-10: #92400e;
+
+  --color-background: #f6e9c9;
+  --color-foreground: #2c2416;
+  --color-primary: #c4a046;
+  --color-primary-foreground: #2c2416;
+  --color-border: #ead9b0;
+  --color-ring: #c4a046;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow-card: 0 1px 0 0 rgb(92 66 20 / 0.04), 0 8px 24px -12px rgb(92 66 20 / 0.18);
+  --shadow-bar: 0 -8px 24px -16px rgb(92 66 20 / 0.25);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100dvh;
+    background: var(--color-wash-mid);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  .bg-app {
+    background-image: linear-gradient(
+      180deg,
+      var(--color-wash-top) 0%,
+      var(--color-wash-mid) 46%,
+      var(--color-wash-bot) 100%
+    );
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pool-cover-shade {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 24%,
+      color-mix(in srgb, var(--color-banner) 6%, transparent) 30%,
+      color-mix(in srgb, var(--color-banner) 18%, transparent) 37%,
+      color-mix(in srgb, var(--color-banner) 38%, transparent) 44%,
+      color-mix(in srgb, var(--color-banner) 66%, transparent) 51%,
+      color-mix(in srgb, var(--color-banner) 88%, transparent) 57%,
+      var(--color-banner) 60%,
+      var(--color-banner) 100%
+    );
+  }
+
+  .pool-name-input {
+    font-family: "SimHei", "Microsoft YaHei", Arial, sans-serif;
+    font-size: 2.125rem;
+    font-weight: 800;
+    line-height: 1.05;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .pool-stats-panel {
+    margin-left: 54%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
