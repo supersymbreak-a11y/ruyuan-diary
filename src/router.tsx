@@ -3,9 +3,11 @@ import { AppErrorComponent } from "@/lib/error-component";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
+  const basepath = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
   return createRouter({
     routeTree,
-    basepath: import.meta.env.BASE_URL,
+    basepath,
     defaultErrorComponent: AppErrorComponent,
   });
 }
