@@ -1,0 +1,15 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/esm-BY1mW9Ji.js","assets/index-BnKeLwOM.js","assets/styles-DItzXfxI.css","assets/dist-C6lw30Xv.js"])))=>i.map(i=>d[i]);
+import{t as e}from"./index-BnKeLwOM.js";var t=`create table if not exists shared_pools (
+  id text primary key,
+  name text not null,
+  type text not null check (type in ('permanent', 'anniversary', 'limited')),
+  up_names jsonb not null default '[]'::jsonb,
+  cover text not null default '',
+  archived boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists shared_pools_created_at_idx
+  on shared_pools (created_at);
+`;function n(e){return e.split(`/`).pop()??e}function r(e){return e.endsWith(`.sql`)}function i(e,t){let i=new Set(t);return[...e].filter(r).map(e=>({name:n(e),path:e})).sort((e,t)=>e.name.localeCompare(t.name)).filter(({name:e})=>!i.has(e))}var a=typeof process<`u`?{}.DATABASE_URL:void 0,o=a&&a.trim()?a:void 0,s=o?`neon`:`pglite`,c=globalThis,l=20,u=1082,d=1186,f=e=>e;function p(e){let t=(async(t,...n)=>{let r=t[0];for(let e=0;e<n.length;e+=1)r+=`$${e+1}${t[e+1]}`;return e(r,n)});return t.query=(t,n=[])=>e(t,n),t}function m(){return c.__pgSqlPromise__??=(async()=>{let{Pool:t,types:n}=await e(async()=>{let{Pool:e,types:t}=await import(`./esm-BY1mW9Ji.js`);return{Pool:e,types:t}},__vite__mapDeps([0,1,2]));n.setTypeParser(l,Number),n.setTypeParser(u,f),n.setTypeParser(d,f);let r=new t({connectionString:o});return p(async(e,t)=>(await r.query(e,t)).rows)})().catch(e=>{throw c.__pgSqlPromise__=void 0,e}),c.__pgSqlPromise__}async function h(){c.__pgliteInstance__??=(async()=>{let{PGlite:t}=await e(async()=>{let{PGlite:e}=await import(`./dist-C6lw30Xv.js`);return{PGlite:e}},__vite__mapDeps([3,1,2])),n=new t({parsers:{[l]:Number,[u]:f,[d]:f}});return await n.waitReady,await n.exec(`create table if not exists _migrations (name text primary key, applied_at timestamptz not null default now())`),n})().catch(e=>{throw c.__pgliteInstance__=void 0,e});let n=await c.__pgliteInstance__,r=(c.__pgliteMigrateChain__??Promise.resolve()).catch(()=>void 0).then(async()=>{let e=Object.assign({"/migrations/0002_shared_pools.sql":t}),r=(await n.query(`select name from _migrations`)).rows.map(e=>e.name);for(let{name:t,path:a}of i(Object.keys(e),r))await n.transaction(async n=>{await n.exec(e[a]),await n.query(`insert into _migrations (name) values ($1)`,[t])})});return c.__pgliteMigrateChain__=r,await r,p(async(e,t)=>(await n.query(e,t)).rows)}var g=null;async function _(){if(typeof window<`u`)throw Error(`@/lib/db is server-only — call getSql() from a createServerFn handler or a server route loader, never from client code.`);return s===`neon`?m():h()}function v(){return g??=_().catch(e=>{throw g=null,e}),g}function y(){return s===`pglite`?v().then(()=>void 0):Promise.resolve()}var b=globalThis;typeof window>`u`&&s===`pglite`&&(b.__pgBootstrapPromise__??=y().catch(e=>{throw b.__pgBootstrapPromise__=void 0,console.error(`[db] PGLite bootstrap failed:`,e),e}));export{v as getSql};
