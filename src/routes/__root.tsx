@@ -39,7 +39,7 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  component: () => (
+  component: () => import.meta.env.MODE === "github-pages" ? <AppContent /> : (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <HeadContent />
@@ -54,3 +54,14 @@ export const Route = createRootRoute({
     </html>
   ),
 });
+
+function AppContent() {
+  return (
+    <>
+      <PreviewHostBridge />
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
+    </>
+  );
+}
