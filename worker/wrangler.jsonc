@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ruyuan-diary-pools-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-10",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ruyuan-diary-pools",
+      "database_id": "7c0404d4-8ac2-49de-babe-69469617af9d"
+    }
+  ]
+}
