@@ -7,11 +7,27 @@ export type SharedPoolDefinition = Pick<
 
 const API_URL = (import.meta.env.VITE_SHARED_POOLS_API_URL as string | undefined)?.replace(/\/$/, "");
 
+function normalizeRemotePools(value: unknown): SharedPoolDefinition[] {
+  if (!Array.isArray(value)) return [];
+  return value.map((row) => {
+    const item = row as Record<string, unknown>;
+    let upNames: string[] = [];
+    if (Array.isArray(item.upNames)) upNames = item.upNames.filter((name): name is string => typeof name === "string");
+    else if (typeof item.upNames === "string") {
+      try {
+        const parsed = JSON.parse(item.upNames);
+        if (Array.isArray(parsed)) upNames = parsed.filter((name): name is string => typeof name === "string");
+      } catch { /* keep empty */ }
+    }
+    return { ...item, upNames, archived: Boolean(item.archived) } as SharedPoolDefinition;
+  });
+}
+
 export async function listSharedPools(): Promise<SharedPoolDefinition[]> {
   if (!API_URL) return [];
   const response = await fetch(`${API_URL}/pools`);
   if (!response.ok) throw new Error(`公共卡池读取失败（${response.status}）`);
-  return (await response.json()) as SharedPoolDefinition[];
+  return normalizeRemotePools(await response.json());
 }
 
 export async function saveSharedPool({ data }: { data: SharedPoolDefinition }): Promise<{ ok: true }> {
