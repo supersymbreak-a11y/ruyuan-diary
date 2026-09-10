@@ -57,6 +57,7 @@ function GachaPage() {
     };
 
     if (useNotes.persist.hasHydrated()) void sync();
+    else void useNotes.persist.rehydrate();
     const unsubscribe = useNotes.persist.onFinishHydration(() => { void sync(); });
     const syncOnFocus = () => { void sync(); };
     window.addEventListener("focus", syncOnFocus);
