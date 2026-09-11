@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ImagePlus, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft, Plus } from "lucide-react";
 import { Drawer } from "vaul";
 import {
   SSR_AGENTS,
-  compressCover,
   coverSrc,
   isCustomCover,
   portraitSrc,
@@ -41,73 +40,6 @@ function Segment<T extends string>({
           {o.label}
         </button>
       ))}
-    </div>
-  );
-}
-
-function CoverPicker({
-  value,
-  onChange,
-}: {
-  value: string;
-  onChange: (id: string) => void;
-}) {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [custom, setCustom] = useState<string | null>(isCustomCover(value) ? value : null);
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
-
-  useEffect(() => {
-    setCustom(isCustomCover(value) ? value : null);
-  }, [value]);
-
-  const pickFile = async (file: File | undefined) => {
-    if (!file) return;
-    setErr("");
-    setBusy(true);
-    try {
-      const data = await compressCover(file);
-      setCustom(data);
-      onChange(data);
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : "图片处理失败");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <div className="space-y-2">
-      <div className="relative flex h-[72px] items-center justify-center overflow-hidden rounded-xl bg-highlight text-xs text-hint">
-        {custom ? <img src={coverSrc(custom)} alt="自定义封面预览" className="h-full w-full object-cover object-left" /> : "未设置封面"}
-      </div>
-
-      <Button
-        type="button"
-        variant="cream"
-        className="w-full"
-        disabled={busy}
-        onClick={() => fileRef.current?.click()}
-      >
-        <ImagePlus className="size-4" />
-        {busy ? "处理中…" : custom ? "更换自定义封面" : "上传自定义封面"}
-      </Button>
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          e.target.value = "";
-          void pickFile(file);
-        }}
-      />
-      {err ? <p className="text-xs text-stat-red">{err}</p> : (
-        <p className="text-[11px] text-hint">
-          默认不使用图片；上传自己的卡池横图后会自动裁成卡片比例。
-        </p>
-      )}
     </div>
   );
 }
@@ -179,7 +111,6 @@ export function PoolEditorSheet({
   const [type, setType] = useState<PoolType>("limited");
   const [up1, setUp1] = useState("");
   const [up2, setUp2] = useState("");
-  const [cover, setCover] = useState("");
 
   const resetFrom = (p: Pool | null) => {
     if (p) {
@@ -187,13 +118,11 @@ export function PoolEditorSheet({
       setType(p.type);
       setUp1(p.upNames[0] ?? "");
       setUp2(p.upNames[1] ?? "");
-      setCover(p.cover);
     } else {
       setName("");
       setType("limited");
       setUp1("");
       setUp2("");
-      setCover("");
     }
   };
 
@@ -232,7 +161,6 @@ export function PoolEditorSheet({
                   name: name.trim() || pool.name,
                   type,
                   upNames: type === "limited" ? upNames : [],
-                  cover,
                 });
                 const updated = useNotes.getState().pools.find((item) => item.id === pool.id);
       if (updated) publishSharedPool(updated);
@@ -241,7 +169,7 @@ export function PoolEditorSheet({
                   name: name.trim() || (type === "anniversary" ? "周年庆卡池" : "当期限定"),
                   type,
                   upNames: type === "limited" ? upNames : [],
-                  cover,
+                  cover: "",
                 });
                 const created = useNotes.getState().pools.find((item) => item.id === id);
       if (created) publishSharedPool(created);
@@ -279,9 +207,6 @@ export function PoolEditorSheet({
           </Field>
         </>
       ) : null}
-      <Field label="封面">
-        <CoverPicker value={cover} onChange={setCover} />
-      </Field>
     </Sheet>
   );
 }
@@ -562,7 +487,6 @@ export function RecruitmentRecordSheet({
   const [adding, setAdding] = useState(false);
   const [agent, setAgent] = useState("");
   const [count, setCount] = useState("1");
-  const [coverDraft, setCoverDraft] = useState("");
   const [nameDraft, setNameDraft] = useState("");
   const [upDraft, setUpDraft] = useState("");
   const [remainingDraft, setRemainingDraft] = useState("40");
@@ -571,7 +495,6 @@ export function RecruitmentRecordSheet({
 
   useEffect(() => {
     if (!open || !pool) return;
-    setCoverDraft(pool.cover);
     setNameDraft(pool.name);
     setUpDraft(pool.upNames.join(" / "));
     setRemainingDraft(String(Math.max(0, 40 - pool.pity)));
@@ -621,7 +544,6 @@ export function RecruitmentRecordSheet({
       .map((name) => name.trim())
       .filter(Boolean);
     updatePool(pool.id, {
-      cover: coverDraft,
       name: nameDraft.trim() || pool.name,
       upNames: pool.type === "limited" ? upNames : [],
       pity: 40 - remaining,
@@ -708,7 +630,6 @@ export function RecruitmentRecordSheet({
                       />
                     </div>
                     <section className="mt-4 rounded-2xl bg-card px-4 py-4 shadow-card">
-                      <details className="mb-4"><summary className="cursor-pointer py-2 text-sm text-brown-deep">自定义卡池封面</summary><CoverPicker value={coverDraft} onChange={setCoverDraft} /></details>
                       {pool.type === "limited" ? (
                         <div className="flex items-center gap-2 border-b border-line pb-4">
                           <span className="shrink-0 text-sm text-brown-deep">UP角色：</span>
