@@ -486,7 +486,7 @@ export function PoolHistoryGrid({ pool, interactive = true }: { pool: Pool; inte
     <>
       <div
         className={cn(
-          "grid grid-cols-5 gap-2.5 py-1",
+          "grid grid-cols-5 gap-2.5 py-1 pl-1",
           history.length > 30 && "max-h-[630px] overflow-y-auto overscroll-auto pr-1",
         )}
       >
