@@ -113,6 +113,22 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Keep every scrollable region usable without reserving scrollbar space. */
+  *,
+  *::before,
+  *::after {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar,
+  *::before::-webkit-scrollbar,
+  *::after::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
   .pool-cover-shade {
     background: linear-gradient(
       90deg,
