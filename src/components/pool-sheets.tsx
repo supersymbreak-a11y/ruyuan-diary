@@ -714,8 +714,11 @@ export function RecruitmentRecordSheet({
         onReplace={(drop) => {
           setSelectedDrop(null);
           setEditingDrop(drop);
-          setAgent(drop.name);
-          setCount(String(drop.draws));
+          // Start from the same blank state as a new submission. The original
+          // record remains untouched until the user selects and submits a
+          // replacement; backing out simply clears this temporary edit.
+          setAgent("");
+          setCount("1");
           setAdding(true);
         }}
       />
