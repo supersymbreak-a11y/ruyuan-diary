@@ -118,7 +118,7 @@ function PoolDetail({ poolId }: { poolId: string }) {
       <section className="mt-3 rounded-2xl bg-card px-4 py-4 shadow-card">
         <h2 className="text-sm font-medium text-brown-deep">绝密记录</h2>
         {ssrs.length === 0 ? (
-          <p className="py-6 text-center text-sm text-hint">本池还没有绝密</p>
+          <p className="py-6 text-center text-sm text-hint">本卡池暂无抽卡记录</p>
         ) : (
           <ul className="mt-2 divide-y divide-line">
             {ssrs.map((d, i) => (

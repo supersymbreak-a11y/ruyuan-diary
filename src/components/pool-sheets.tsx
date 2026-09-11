@@ -480,7 +480,7 @@ export function PoolHistoryGrid({ pool, interactive = true }: { pool: Pool; inte
   const [selectedDrop, setSelectedDrop] = useState<HistoryDrop | null>(null);
   const history = useMemo(() => historyForPool(pool, pulls), [pool, pulls]);
   if (history.length === 0) {
-    return <p className="py-5 text-center text-sm text-hint">本池还没有绝密记录</p>;
+    return <p className="py-5 text-center text-sm text-hint">本卡池暂无抽卡记录</p>;
   }
   return (
     <>
