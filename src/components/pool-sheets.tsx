@@ -484,7 +484,12 @@ export function PoolHistoryGrid({ pool, interactive = true }: { pool: Pool; inte
   }
   return (
     <>
-      <div className="grid grid-cols-5 gap-2.5 py-1">
+      <div
+        className={cn(
+          "grid grid-cols-5 gap-2.5 py-1",
+          history.length > 30 && "max-h-[630px] overflow-y-auto overscroll-auto pr-1",
+        )}
+      >
         {history.map((drop) => <HistoryCard key={drop.id} drop={drop} interactive={interactive} onClick={() => setSelectedDrop(drop)} />)}
       </div>
       {interactive ? <RecruitmentDeleteSheet drop={selectedDrop} onClose={() => setSelectedDrop(null)} /> : null}
