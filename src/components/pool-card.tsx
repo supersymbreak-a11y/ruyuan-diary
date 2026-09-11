@@ -32,7 +32,14 @@ export function PoolCard({
       >
         <div className="absolute inset-0">
           {isCustomCover(pool.cover) ? (
-            <img src={coverSrc(pool.cover)} alt="" className="h-full w-full object-cover object-left" />
+            <img
+              src={coverSrc(pool.cover)}
+              alt=""
+              className={cn(
+                "h-full w-full object-cover",
+                ["动如雷霆", "弹剑酿花", "欺天罔地"].includes(pool.name) ? "object-right" : "object-left",
+              )}
+            />
           ) : null}
           <div className="pool-cover-shade absolute inset-0" />
           <span className="absolute bottom-1 left-1 rounded-md bg-gold-bar px-2 py-0.5 text-base font-medium text-card">
