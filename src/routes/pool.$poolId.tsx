@@ -42,7 +42,7 @@ function PoolDetail({ poolId }: { poolId: string }) {
     );
   }
 
-  const stats = poolStats(pool.id, pulls);
+  const stats = poolStats(pool.id, pulls, pool.pity);
   const ssrs = stats.history.flatMap((h) =>
     h.drops.map((d) => ({ ...d, at: h.at, count: h.count })),
   );

@@ -168,7 +168,7 @@ function GachaPage() {
             <div key={pool.id}>
               <PoolCard
                 pool={pool}
-                stats={poolStats(pool.id, pulls)}
+                stats={poolStats(pool.id, pulls, pool.pity)}
                 expanded={expanded}
                 onOpen={() => setExpandedPoolIds((current) => {
                   const next = new Set(current);

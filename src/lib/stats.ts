@@ -86,6 +86,13 @@ export function overviewStats(pools: Pool[], pulls: PullRecord[]): OverviewStats
     }
   }
 
+  for (const pool of pools) {
+    const perm = pool.type !== "limited";
+    totalPulls += pool.pity;
+    if (perm) permPulls += pool.pity;
+    else upPulls += pool.pity;
+  }
+
   let noOffAttempts = 0;
   let noOffHits = 0;
   for (const pool of pools) {
@@ -116,9 +123,9 @@ export function overviewStats(pools: Pool[], pulls: PullRecord[]): OverviewStats
   };
 }
 
-export function poolStats(poolId: string, pulls: PullRecord[]) {
+export function poolStats(poolId: string, pulls: PullRecord[], poolPity = 0) {
   const mine = pulls.filter((p) => p.poolId === poolId);
-  const count = mine.reduce((s, p) => s + p.count, 0);
+  const count = mine.reduce((s, p) => s + p.count, 0) + poolPity;
   const ssr = mine.reduce((s, p) => s + p.drops.length, 0);
   const upHits = mine.reduce(
     (s, p) => s + p.drops.filter((d) => d.isUp).length,
