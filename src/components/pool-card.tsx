@@ -37,7 +37,7 @@ export function PoolCard({
               alt=""
               className={cn(
                 "h-full w-full object-cover",
-                ["动如雷霆", "弹剑酿花", "欺天罔地"].includes(pool.name) ? "object-right" : "object-left",
+                ["弹剑酿花", "欺天罔地"].includes(pool.name) ? "object-right" : "object-left",
               )}
             />
           ) : null}
