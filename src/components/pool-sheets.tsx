@@ -857,7 +857,7 @@ function AgentPickerSheet({
               {agents.map((name) => (
                 <button key={name} type="button" onClick={() => onSelect(name)} className="group">
                   <div className="aspect-[3/4] overflow-hidden rounded-lg border-2 border-gold-deep/70 bg-wash-top shadow-card">
-                    <img src={portraitSrc(name)} alt={`${name}立绘`} className="h-full w-full rounded-lg object-cover" />
+                    <img src={portraitSrc(name)} alt={`${name}立绘`} className={cn("h-full w-full rounded-lg object-cover", name === "华佗" ? "object-[65%]" : "object-center")} />
                   </div>
                   <div className="mt-1 rounded-full border border-gold-deep/60 px-1 py-0.5 text-center text-xs text-brown-deep group-active:bg-highlight">{name}</div>
                 </button>
