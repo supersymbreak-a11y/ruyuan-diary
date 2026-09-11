@@ -93,6 +93,7 @@ type NotesState = NotesData & {
   archivePool: (id: string) => void;
   recordPull: (poolId: string, count: number, drops: SsrDrop[]) => void;
   removeRecruitment: (pullId: string, dropIndex: number) => void;
+  updateRecruitmentCount: (pullId: string, dropIndex: number, count: number) => void;
   undoLastPull: (poolId?: string) => void;
   addResource: (key: ResourceKey, delta: number) => void;
   setResource: (key: ResourceKey, value: number) => void;
@@ -301,6 +302,38 @@ export const useNotes = create<NotesState>()(
         });
       },
 
+      updateRecruitmentCount: (pullId, dropIndex, nextCount) => {
+        const state = get();
+        const rec = state.pulls.find((pull) => pull.id === pullId);
+        if (!rec || !rec.drops[dropIndex]) return;
+        const count = Math.max(1, Math.min(999, Math.round(Number(nextCount) || 1)));
+        const delta = count - rec.count;
+        set({
+          pulls: state.pulls.map((pull) =>
+            pull.id !== pullId
+              ? pull
+              : {
+                  ...pull,
+                  count,
+                  pityAfter: Math.max(0, pull.pityAfter + delta),
+                  drops: pull.drops.map((drop, index) =>
+                    index === dropIndex ? { ...drop, pullsToSsr: count } : drop,
+                  ),
+                },
+          ),
+          pools: state.pools.map((pool) => {
+            if (pool.id !== rec.poolId) return pool;
+            const isLatestForPool = state.pulls.find((pull) => pull.poolId === rec.poolId)?.id === rec.id;
+            return isLatestForPool
+              ? {
+                  ...pool,
+                  pity: Math.max(0, Math.min(40, pool.pity + delta)),
+                  upPity: Math.max(0, Math.min(80, pool.upPity + delta)),
+                }
+              : pool;
+          }),
+        });
+      },
       removeRecruitment: (pullId, dropIndex) => {
         const state = get();
         const rec = state.pulls.find((pull) => pull.id === pullId);

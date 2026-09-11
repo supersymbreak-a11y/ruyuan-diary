@@ -399,6 +399,12 @@ function RecruitmentDeleteSheet({
   onReplace?: (drop: HistoryDrop) => void;
 }) {
   const removeRecruitment = useNotes((state) => state.removeRecruitment);
+  const updateRecruitmentCount = useNotes((state) => state.updateRecruitmentCount);
+  const [countDraft, setCountDraft] = useState("");
+
+  useEffect(() => {
+    setCountDraft(drop ? String(drop.draws) : "");
+  }, [drop]);
 
   return (
     <Drawer.Root open={Boolean(drop)} onOpenChange={(value) => { if (!value) onClose(); }}>
@@ -428,12 +434,28 @@ function RecruitmentDeleteSheet({
                 </div>
                 <div className="flex items-center gap-4 text-base text-brown-deep">
                   <span className="w-24 shrink-0">招募次数</span>
-                  <div className="flex h-11 flex-1 items-center justify-center rounded-xl border border-line bg-card text-lg tabular text-gold-deep">{drop.draws}</div>
+                  <TextInput
+                    aria-label="招募次数"
+                    inputMode="numeric"
+                    value={countDraft}
+                    onChange={(event) => setCountDraft(event.target.value.replace(/[^\d]/g, ""))}
+                    className="h-11 flex-1 text-center text-lg tabular text-gold-deep"
+                  />
                 </div>
               </div>
-              <p className="mt-4 text-center text-xs text-hint">删除后，卡池统计将立即更新</p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <p className="mt-4 text-center text-xs text-hint">修改或删除后，卡池统计将立即更新</p>
+              <div className="mt-6 grid grid-cols-3 gap-3">
                 <Button variant="cream" size="lg" onClick={onClose}>取消</Button>
+                <Button
+                  size="lg"
+                  className="bg-gold-deep text-card"
+                  onClick={() => {
+                    updateRecruitmentCount(drop.pullId, drop.dropIndex, Number(countDraft));
+                    onClose();
+                  }}
+                >
+                  保存修改
+                </Button>
                 <Button
                   size="lg"
                   className="bg-stat-red text-card"
