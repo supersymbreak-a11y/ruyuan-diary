@@ -83,7 +83,7 @@ function StatLine({
   return (
     <div className="flex items-baseline gap-1.5 whitespace-nowrap text-[13px] leading-none">
       <span className="shrink-0 text-card/85">{label}</span>
-      <span className={cn("tabular text-lg font-semibold leading-none text-card")}>{value}</span>
+      <span className={cn("tabular text-[13px] font-semibold leading-none text-card")}>{value}</span>
     </div>
   );
 }
