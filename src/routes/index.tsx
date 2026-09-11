@@ -182,7 +182,7 @@ function GachaPage() {
           );
         })}
       </div>
-`r`n
+
       <NicknameSheet open={nickOpen} onOpenChange={setNickOpen} />
       <PoolEditorSheet
         open={editorOpen}
