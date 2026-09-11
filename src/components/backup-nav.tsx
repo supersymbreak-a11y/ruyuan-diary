@@ -15,14 +15,10 @@ export function BackupNavItem() {
   const exportBackup = () => {
     const state = useNotes.getState();
     const payload = {
-      nickname: state.nickname,
-      pools: state.pools,
+      version: 2,
       pulls: state.pulls,
       resources: state.resources,
       ledger: state.ledger,
-      daily: state.daily,
-      weekly: state.weekly,
-      deductOnPull: state.deductOnPull,
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
       type: "application/json",

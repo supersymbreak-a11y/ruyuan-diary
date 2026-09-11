@@ -441,8 +441,8 @@ export const useNotes = create<NotesState>()(
         const base = seed();
         const copper = parsed.resources?.copper ?? 0;
         set({
-          nickname: parsed.nickname || base.nickname,
-          pools: normalizePools(parsed.pools?.length ? parsed.pools : base.pools),
+          nickname: base.nickname,
+          pools: base.pools,
           pulls: parsed.pulls ?? [],
           resources: {
             whiteGold: parsed.resources?.whiteGold ?? 0,
