@@ -347,7 +347,9 @@ function historyForPool(pool: Pool, pulls: ReturnType<typeof useNotes.getState>[
         id: `${pull.id}-${index}`,
         pullId: pull.id,
         dropIndex: index,
-        pityNumber: drop.pityNumber ?? fallbackPityNumber,
+        // Recompute ordinals from the current list so deleting any record
+        // immediately closes the gap and keeps badges ordered 1..N.
+        pityNumber: fallbackPityNumber,
         draws: drop.pullsToSsr ?? pull.count,
         isRateUpPool: pool.type === "limited",
       });
@@ -509,7 +511,8 @@ export function RecruitmentRecordSheet({
 }) {
   const pulls = useNotes((s) => s.pulls);
   const recordPull = useNotes((s) => s.recordPull);
-  const removeRecruitment = useNotes((s) => s.removeRecruitment);
+  const updateRecruitmentCount = useNotes((s) => s.updateRecruitmentCount);
+  const updateRecruitmentAgent = useNotes((s) => s.updateRecruitmentAgent);
   const updatePool = useNotes((s) => s.updatePool);
   const [adding, setAdding] = useState(false);
   const [agent, setAgent] = useState("");
@@ -518,6 +521,7 @@ export function RecruitmentRecordSheet({
   const [upDraft, setUpDraft] = useState("");
   const [remainingDraft, setRemainingDraft] = useState("40");
   const [selectedDrop, setSelectedDrop] = useState<HistoryDrop | null>(null);
+  const [editingDrop, setEditingDrop] = useState<HistoryDrop | null>(null);
   const [agentPickerOpen, setAgentPickerOpen] = useState(false);
 
   useEffect(() => {
@@ -534,6 +538,7 @@ export function RecruitmentRecordSheet({
 
   const resetAdd = () => {
     setAdding(false);
+    setEditingDrop(null);
     setAgent("");
     setCount("1");
   };
@@ -547,19 +552,17 @@ export function RecruitmentRecordSheet({
   const submit = () => {
     if (!pool || !agent.trim()) return;
     const pullCount = Math.max(1, Math.min(999, Number(count) || 1));
-    const ordinal = history.length + 1;
     const currentUpNames = pool.type === "limited" ? upDraft
       .split(/[、,/\s]+/)
       .map((name) => name.trim())
       .filter(Boolean) : [];
-    recordPull(pool.id, pullCount, [
-      {
-        name: agent.trim(),
-        isUp: currentUpNames.includes(agent.trim()),
-        pityNumber: ordinal,
-        pullsToSsr: pullCount,
-      },
-    ]);
+    const isUp = currentUpNames.includes(agent.trim());
+    if (editingDrop) {
+      updateRecruitmentAgent(editingDrop.pullId, editingDrop.dropIndex, agent, isUp);
+      updateRecruitmentCount(editingDrop.pullId, editingDrop.dropIndex, pullCount);
+    } else {
+      recordPull(pool.id, pullCount, [{ name: agent.trim(), isUp, pullsToSsr: pullCount }]);
+    }
     resetAdd();
   };
 
@@ -709,10 +712,10 @@ export function RecruitmentRecordSheet({
         drop={selectedDrop}
         onClose={() => setSelectedDrop(null)}
         onReplace={(drop) => {
-          removeRecruitment(drop.pullId, drop.dropIndex);
           setSelectedDrop(null);
-          setAgent("");
-          setCount("1");
+          setEditingDrop(drop);
+          setAgent(drop.name);
+          setCount(String(drop.draws));
           setAdding(true);
         }}
       />

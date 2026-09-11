@@ -94,6 +94,7 @@ type NotesState = NotesData & {
   recordPull: (poolId: string, count: number, drops: SsrDrop[]) => void;
   removeRecruitment: (pullId: string, dropIndex: number) => void;
   updateRecruitmentCount: (pullId: string, dropIndex: number, count: number) => void;
+  updateRecruitmentAgent: (pullId: string, dropIndex: number, name: string, isUp: boolean) => void;
   undoLastPull: (poolId?: string) => void;
   addResource: (key: ResourceKey, delta: number) => void;
   setResource: (key: ResourceKey, value: number) => void;
@@ -332,6 +333,25 @@ export const useNotes = create<NotesState>()(
                 }
               : pool;
           }),
+        });
+      },
+      updateRecruitmentAgent: (pullId, dropIndex, name, isUp) => {
+        const state = get();
+        const trimmedName = name.trim();
+        if (!trimmedName) return;
+        const rec = state.pulls.find((pull) => pull.id === pullId);
+        if (!rec || !rec.drops[dropIndex]) return;
+        set({
+          pulls: state.pulls.map((pull) =>
+            pull.id !== pullId
+              ? pull
+              : {
+                  ...pull,
+                  drops: pull.drops.map((drop, index) =>
+                    index === dropIndex ? { ...drop, name: trimmedName, isUp } : drop,
+                  ),
+                },
+          ),
         });
       },
       removeRecruitment: (pullId, dropIndex) => {
