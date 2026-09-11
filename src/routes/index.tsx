@@ -46,7 +46,7 @@ function GachaPage() {
         const remoteIds = new Set(remote.map((pool) => pool.id));
         const missing = remote.length === 0
           ? local.map(toSharedPool)
-          : local.filter((pool) => !remoteIds.has(pool.id)).map(toSharedPool);
+          : local.filter((pool) => pool.id !== "limited-current" && !remoteIds.has(pool.id)).map(toSharedPool);
 
         await Promise.all(missing.map((pool) => saveSharedPool({ data: pool })));
         if (cancelled) return;
@@ -182,19 +182,7 @@ function GachaPage() {
           );
         })}
       </div>
-
-      <Button
-        variant="outline"
-        className="mt-3 w-full border-dashed"
-        onClick={() => {
-          setEditing(null);
-          setEditorOpen(true);
-        }}
-      >
-        <Plus className="size-4" />
-        添加卡池
-      </Button>
-
+`r`n
       <NicknameSheet open={nickOpen} onOpenChange={setNickOpen} />
       <PoolEditorSheet
         open={editorOpen}

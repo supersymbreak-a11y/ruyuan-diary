@@ -116,7 +116,7 @@ function normalizePools(pools: Pool[]): Pool[] {
   const permanent = pools.find((pool) => pool.id === "permanent") ?? { ...DEFAULT_POOLS[0] };
   return [
     { ...permanent, type: "permanent", archived: false },
-    ...pools.filter((pool) => pool.id !== "permanent").map((pool): Pool => {
+    ...pools.filter((pool) => pool.id !== "permanent" && pool.id !== "limited-current").map((pool): Pool => {
       const type: PoolType = pool.type === "anniversary" ? "anniversary" : "limited";
       return {
         ...pool,
