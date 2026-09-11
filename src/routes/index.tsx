@@ -34,7 +34,7 @@ function GachaPage() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [editing, setEditing] = useState<Pool | null>(null);
   const [recordPool, setRecordPool] = useState<Pool | null>(null);
-  const [expandedPoolId, setExpandedPoolId] = useState<string | null>(null);
+  const [expandedPoolIds, setExpandedPoolIds] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -163,14 +163,19 @@ function GachaPage() {
 
       <div className="mt-3 space-y-2.5">
         {visible.map((pool) => {
-          const expanded = expandedPoolId === pool.id;
+          const expanded = expandedPoolIds.has(pool.id);
           return (
             <div key={pool.id}>
               <PoolCard
                 pool={pool}
                 stats={poolStats(pool.id, pulls)}
                 expanded={expanded}
-                onOpen={() => setExpandedPoolId(expanded ? null : pool.id)}
+                onOpen={() => setExpandedPoolIds((current) => {
+                  const next = new Set(current);
+                  if (next.has(pool.id)) next.delete(pool.id);
+                  else next.add(pool.id);
+                  return next;
+                })}
                 onEdit={() => setRecordPool(pool)}
               />
               {expanded ? (
