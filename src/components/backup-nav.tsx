@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { DatabaseBackup, Download, Upload } from "lucide-react";
 import { useNotes } from "@/lib/store";
 import { Button } from "./ui/button";
@@ -9,7 +9,6 @@ import { Sheet } from "./ui/sheet";
 export function BackupNavItem() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
   const importJson = useNotes((state) => state.importJson);
 
   const exportBackup = () => {
@@ -51,16 +50,19 @@ export function BackupNavItem() {
             <Download className="size-4" />
             导出备份
           </Button>
-          <Button variant="outline" className="gap-2" onClick={() => fileRef.current?.click()}>
+          <label
+            htmlFor="backup-import-file"
+            className="inline-flex h-11 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-gold-deep/30 bg-card px-4 text-sm font-medium text-brown-deep transition-[transform,background-color,opacity] duration-150 ease-out active:scale-[0.96]"
+          >
             <Upload className="size-4" />
             导入备份
-          </Button>
+          </label>
         </div>
         <input
-          ref={fileRef}
           type="file"
-          accept="application/json"
-          className="hidden"
+          id="backup-import-file"
+          accept=".json,application/json,text/json,text/plain"
+          className="sr-only"
           onChange={async (event) => {
             const file = event.target.files?.[0];
             if (!file) return;
