@@ -366,7 +366,7 @@ function HistoryCard({ drop, onClick, interactive = true }: { drop: HistoryDrop;
   return interactive ? (
     <button type="button" onClick={onClick} aria-label={`查看或删除${drop.name}的招募记录`} className={className}>
       <img src={portraitSrc(drop.name)} alt={`${drop.name}立绘`} className="absolute inset-0 h-full w-full rounded-xl object-cover" />
-      <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-brown-deep shadow-card">
+      <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-card shadow-card">
         {drop.pityNumber}
       </span>
       <p
@@ -381,7 +381,7 @@ function HistoryCard({ drop, onClick, interactive = true }: { drop: HistoryDrop;
   ) : (
     <div className={className} aria-hidden="true">
       <img src={portraitSrc(drop.name)} alt="" className="absolute inset-0 h-full w-full rounded-xl object-cover" />
-      <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-brown-deep shadow-card">
+      <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-card shadow-card">
         {drop.pityNumber}
       </span>
       <p className={cn("absolute inset-x-0 bottom-0 flex h-5 items-center justify-center rounded-b-xl text-base font-medium tabular text-card", !drop.isRateUpPool || drop.isUp ? "bg-gold-bar/85" : "bg-stat-red/85")}>
@@ -422,7 +422,7 @@ function RecruitmentDeleteSheet({
               <div className="mx-auto w-24">
                 <div className="relative aspect-[3/4] overflow-visible rounded-xl bg-brown-deep shadow-card">
                   <img src={portraitSrc(drop.name)} alt={`${drop.name}立绘`} className="absolute inset-0 h-full w-full rounded-xl object-cover" />
-                  <span className="absolute -left-1 -top-1 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-brown-deep">
+                  <span className="absolute -left-1 -top-1 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-card">
                     {drop.pityNumber}
                   </span>
                   <button type="button" aria-label={`移除${drop.name}并重新选择`} onClick={() => { if (onReplace) onReplace(drop); else { removeRecruitment(drop.pullId, drop.dropIndex); onClose(); } }} className="absolute -right-2 -top-2 z-20 flex size-7 items-center justify-center rounded-full bg-stat-red text-lg leading-none text-card shadow-card">−</button>
