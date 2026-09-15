@@ -52,7 +52,14 @@ function GachaPage() {
           .filter((pool, index, all) => all.findIndex((item) => item.id === pool.id) === index);
         const missing = candidates.filter((pool) => !remoteIds.has(pool.id));
 
-        await Promise.all(missing.map((pool) => saveSharedPool({ data: pool })));
+        // A remote write failure should not prevent the built-in pools from
+        // appearing locally. Retry the writes on the next focus/load instead.
+        const saveResults = await Promise.allSettled(
+          missing.map((pool) => saveSharedPool({ data: pool })),
+        );
+        if (saveResults.some((result) => result.status === "rejected")) {
+          console.error("部分公共卡池保存失败，将在下次同步时重试");
+        }
         if (cancelled) return;
         useNotes.getState().mergeSharedPools([...remote, ...missing]);
       } catch (error) {
