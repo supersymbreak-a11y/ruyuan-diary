@@ -10,6 +10,7 @@ import { IconPulls, IconSsr, IconTrophy } from "@/components/stat-icons";
 import { Button } from "@/components/ui/button";
 import { formatAvg, overviewStats, poolStats } from "@/lib/stats";
 import { useNotes, type Pool } from "@/lib/store";
+import { DEFAULT_POOLS } from "@/lib/game-data";
 import { listSharedPools, saveSharedPool, toSharedPool } from "@/lib/shared-pools";
 
 export const Route = createFileRoute("/")({ component: GachaRoute });
@@ -44,9 +45,12 @@ function GachaPage() {
         const remote = await listSharedPools();
         const local = useNotes.getState().pools;
         const remoteIds = new Set(remote.map((pool) => pool.id));
-        const missing = remote.length === 0
-          ? local.map(toSharedPool)
-          : local.filter((pool) => pool.id !== "limited-current" && !remoteIds.has(pool.id)).map(toSharedPool);
+        const builtins = DEFAULT_POOLS
+          .filter((pool) => pool.id !== "permanent")
+          .map(toSharedPool);
+        const candidates = [...local.map(toSharedPool), ...builtins]
+          .filter((pool, index, all) => all.findIndex((item) => item.id === pool.id) === index);
+        const missing = candidates.filter((pool) => !remoteIds.has(pool.id));
 
         await Promise.all(missing.map((pool) => saveSharedPool({ data: pool })));
         if (cancelled) return;

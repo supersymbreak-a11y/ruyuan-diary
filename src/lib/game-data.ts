@@ -82,8 +82,20 @@ export const DEFAULT_POOLS = [
     createdAt: "2024-09-26T00:00:00.000Z",
   },
   {
-    id: "limited-current",
-    name: "当期限定",
+    id: "anniversary-yan-jin-mu-xiu",
+    name: "燕金募秀",
+    type: "anniversary" as const,
+    upNames: [] as string[],
+    pity: 0,
+    upPity: 0,
+    guaranteedUp: false,
+    cover: "",
+    archived: false,
+    createdAt: "2026-09-15T00:00:00.000Z",
+  },
+  {
+    id: "limited-yan-jian-li-zhi",
+    name: "言简理直",
     type: "limited" as const,
     upNames: [] as string[],
     pity: 0,
@@ -91,7 +103,7 @@ export const DEFAULT_POOLS = [
     guaranteedUp: false,
     cover: "",
     archived: false,
-    createdAt: "2024-09-26T00:00:00.000Z",
+    createdAt: "2026-09-15T00:00:00.000Z",
   },
 ];
 
