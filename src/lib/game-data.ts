@@ -94,6 +94,19 @@ export const DEFAULT_POOLS = [
     createdAt: "2026-09-15T00:00:00.000Z",
   },
   {
+    id: "anniversary-yuan-men-qian-jiang",
+    name: "辕门遣将",
+    type: "anniversary" as const,
+    // The two UP agents are intentionally left empty for users to configure.
+    upNames: [] as string[],
+    pity: 0,
+    upPity: 0,
+    guaranteedUp: false,
+    cover: "",
+    archived: false,
+    createdAt: "2026-09-16T00:00:00.000Z",
+  },
+  {
     id: "limited-yan-jian-li-zhi",
     name: "言简理直",
     type: "limited" as const,

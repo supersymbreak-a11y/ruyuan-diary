@@ -126,7 +126,7 @@ export function toSharedPool(pool: Pool): SharedPoolDefinition {
     id: pool.id,
     name: pool.name,
     type: pool.type,
-    upNames: pool.type === "limited" ? pool.upNames : [],
+    upNames: pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upNames : [],
     cover: pool.cover,
     archived: pool.archived,
     createdAt: pool.createdAt,

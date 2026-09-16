@@ -123,9 +123,9 @@ function normalizePools(pools: Pool[]): Pool[] {
       return {
         ...pool,
         type,
-        upNames: type === "limited" ? pool.upNames : [],
-        upPity: type === "limited" ? pool.upPity : 0,
-        guaranteedUp: type === "limited" ? pool.guaranteedUp : false,
+        upNames: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upNames : [],
+        upPity: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upPity : 0,
+        guaranteedUp: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.guaranteedUp : false,
       };
     }),
   ];
@@ -166,15 +166,15 @@ function applyPity(pool: Pool, count: number, drops: SsrDrop[]) {
 
   if (drops.length === 0) {
     pity = Math.min(40, pity + count);
-    if (pool.type === "limited") upPity = Math.min(80, upPity + count);
+    if (pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang") upPity = Math.min(80, upPity + count);
     return { pity, upPity, guaranteedUp, resolved };
   }
 
   for (const drop of drops) {
     const namedUp = pool.upNames.includes(drop.name);
     let isUp = drop.isUp || namedUp;
-    if (pool.type !== "limited") isUp = false;
-    if (pool.type === "limited" && guaranteedUp) isUp = true;
+    if (pool.type !== "limited" && pool.id !== "anniversary-yuan-men-qian-jiang") isUp = false;
+    if ((pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang") && guaranteedUp) isUp = true;
     resolved.push({
       name: drop.name.trim() || "未知绝密",
       isUp,
@@ -182,7 +182,7 @@ function applyPity(pool: Pool, count: number, drops: SsrDrop[]) {
       pullsToSsr: drop.pullsToSsr,
     });
     pity = 0;
-    if (pool.type === "limited") {
+    if (pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang") {
       if (isUp) {
         upPity = 0;
         guaranteedUp = false;
@@ -236,9 +236,9 @@ export const useNotes = create<NotesState>()(
               ...patch,
               id: p.id,
               type,
-              upNames: type === "limited" ? (patch.upNames ?? p.upNames) : [],
-              upPity: type === "limited" ? (patch.upPity ?? p.upPity) : 0,
-              guaranteedUp: type === "limited" ? (patch.guaranteedUp ?? p.guaranteedUp) : false,
+              upNames: type === "limited" || p.id === "anniversary-yuan-men-qian-jiang" ? (patch.upNames ?? p.upNames) : [],
+              upPity: type === "limited" || p.id === "anniversary-yuan-men-qian-jiang" ? (patch.upPity ?? p.upPity) : 0,
+              guaranteedUp: type === "limited" || p.id === "anniversary-yuan-men-qian-jiang" ? (patch.guaranteedUp ?? p.guaranteedUp) : false,
             };
           }),
         })),
@@ -251,8 +251,8 @@ export const useNotes = create<NotesState>()(
             return {
               ...definition,
               pity: local?.pity ?? 0,
-              upPity: definition.type === "limited" ? (local?.upPity ?? 0) : 0,
-              guaranteedUp: definition.type === "limited" ? (local?.guaranteedUp ?? false) : false,
+              upPity: definition.type === "limited" || definition.id === "anniversary-yuan-men-qian-jiang" ? (local?.upPity ?? 0) : 0,
+              guaranteedUp: definition.type === "limited" || definition.id === "anniversary-yuan-men-qian-jiang" ? (local?.guaranteedUp ?? false) : false,
             };
           });
           return { pools: normalizePools(merged) };

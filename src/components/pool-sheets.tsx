@@ -160,7 +160,7 @@ export function PoolEditorSheet({
                 updatePool(pool.id, {
                   name: name.trim() || pool.name,
                   type,
-                  upNames: type === "limited" ? upNames : [],
+                  upNames: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? upNames : [],
                 });
                 const updated = useNotes.getState().pools.find((item) => item.id === pool.id);
       if (updated) publishSharedPool(updated);
@@ -197,7 +197,7 @@ export function PoolEditorSheet({
       <Field label="卡池名称">
         <TextInput value={name} onChange={(e) => setName(e.target.value)} />
       </Field>
-      {type === "limited" ? (
+      {type === "limited" || pool?.id === "anniversary-yuan-men-qian-jiang" ? (
         <>
           <Field label="UP 密探 1">
             <TextInput value={up1} onChange={(e) => setUp1(e.target.value)} />
@@ -286,7 +286,7 @@ export function RecordSheet({
           <Field label="绝密密探">
             <AgentSuggest value={name} onChange={setName} placeholder="输入或选择" />
           </Field>
-          {pool?.type === "limited" ? (
+          {pool?.type === "limited" || pool?.id === "anniversary-yuan-men-qian-jiang" ? (
             <button
               type="button"
               onClick={() => setIsUp((v) => !v)}
@@ -351,7 +351,7 @@ function historyForPool(pool: Pool, pulls: ReturnType<typeof useNotes.getState>[
         // immediately closes the gap and keeps badges ordered 1..N.
         pityNumber: fallbackPityNumber,
         draws: drop.pullsToSsr ?? pull.count,
-        isRateUpPool: pool.type === "limited",
+        isRateUpPool: pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang",
       });
     });
   }
@@ -552,7 +552,7 @@ export function RecruitmentRecordSheet({
   const submit = () => {
     if (!pool || !agent.trim()) return;
     const pullCount = Math.max(1, Math.min(999, Number(count) || 1));
-    const currentUpNames = pool.type === "limited" ? upDraft
+    const currentUpNames = pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? upDraft
       .split(/[、,/\s]+/)
       .map((name) => name.trim())
       .filter(Boolean) : [];
@@ -575,7 +575,7 @@ export function RecruitmentRecordSheet({
       .filter(Boolean);
     updatePool(pool.id, {
       name: nameDraft.trim() || pool.name,
-      upNames: pool.type === "limited" ? upNames : [],
+      upNames: pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? upNames : [],
       pity: 40 - remaining,
     });
     const updated = useNotes.getState().pools.find((item) => item.id === pool.id);
@@ -660,7 +660,7 @@ export function RecruitmentRecordSheet({
                       />
                     </div>
                     <section className="mt-4 rounded-2xl bg-card px-4 py-4 shadow-card">
-                      {pool.type === "limited" ? (
+                      {pool.type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? (
                         <div className="flex items-center gap-2 border-b border-line pb-4">
                           <span className="shrink-0 text-sm text-brown-deep">UP角色：</span>
                           <TextInput

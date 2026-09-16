@@ -69,7 +69,9 @@ export function overviewStats(pools: Pool[], pulls: PullRecord[]): OverviewStats
     const pool = byId.get(pull.poolId);
     if (!pool) continue;
     totalPulls += pull.count;
-    const perm = pool.type !== "limited";
+    // Only the permanent pool belongs to the permanent-pool summary. Every
+    // other pool, including anniversary pools, is part of UP-pool statistics.
+    const perm = pool.id === "permanent";
     if (perm) permPulls += pull.count;
     else upPulls += pull.count;
 
@@ -87,7 +89,7 @@ export function overviewStats(pools: Pool[], pulls: PullRecord[]): OverviewStats
   }
 
   for (const pool of pools) {
-    const perm = pool.type !== "limited";
+    const perm = pool.id === "permanent";
     totalPulls += pool.pity;
     if (perm) permPulls += pool.pity;
     else upPulls += pool.pity;
@@ -96,7 +98,7 @@ export function overviewStats(pools: Pool[], pulls: PullRecord[]): OverviewStats
   let noOffAttempts = 0;
   let noOffHits = 0;
   for (const pool of pools) {
-    if (pool.type !== "limited") continue;
+    if (pool.type !== "limited" && pool.id !== "anniversary-yuan-men-qian-jiang") continue;
     const result = noOffStats(pulls.filter((pull) => pull.poolId === pool.id));
     noOffAttempts += result.attempts;
     noOffHits += result.hits;
