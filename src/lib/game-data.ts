@@ -5,12 +5,17 @@ export function isCustomCover(id: string) {
     id.startsWith("data:") ||
     id.startsWith("blob:") ||
     id.startsWith("http://") ||
-    id.startsWith("https://")
+    id.startsWith("https://") ||
+    id.startsWith("/covers/") ||
+    id.startsWith("covers/")
   );
 }
 
 export function coverSrc(id: string) {
-  return isCustomCover(id) ? id : "";
+  if (!isCustomCover(id)) return "";
+  if (id.startsWith("/covers/")) return `${import.meta.env.BASE_URL}${id.slice(1)}`;
+  if (id.startsWith("covers/")) return `${import.meta.env.BASE_URL}${id}`;
+  return id;
 }
 
 // Keep enough pixels for high-density displays. The banner is shown wider
@@ -89,7 +94,7 @@ export const DEFAULT_POOLS = [
     pity: 0,
     upPity: 0,
     guaranteedUp: false,
-    cover: "",
+    cover: "/covers/yan-jin-mu-xiu.png",
     archived: false,
     createdAt: "2026-09-15T00:00:00.000Z",
   },
@@ -114,7 +119,7 @@ export const DEFAULT_POOLS = [
     pity: 0,
     upPity: 0,
     guaranteedUp: false,
-    cover: "",
+    cover: "/covers/yan-jian-li-zhi.png",
     archived: false,
     createdAt: "2026-09-15T00:00:00.000Z",
   },
@@ -188,6 +193,8 @@ export const SSR_AGENTS = [
   "程普",
   "夏侯渊",
   "刘璋",
+  "法正",
+  "简雍",
   "吕布",
   "曹丕",
 ];
