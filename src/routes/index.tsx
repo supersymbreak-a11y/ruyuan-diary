@@ -44,10 +44,18 @@ function GachaPage() {
       try {
         const remote = await listSharedPools();
         const local = useNotes.getState().pools;
-        const remoteIds = new Set(remote.map((pool) => pool.id));
         const builtins = DEFAULT_POOLS
           .filter((pool) => pool.id !== "permanent")
           .map(toSharedPool);
+        // Built-in banners are application assets, not user-generated data.
+        // Older shared records may still have an empty/placeholder cover, so
+        // prefer the current built-in cover whenever one is configured.
+        const builtinById = new Map(builtins.map((pool) => [pool.id, pool]));
+        const syncedRemote = remote.map((pool) => {
+          const builtin = builtinById.get(pool.id);
+          return builtin?.cover ? { ...pool, cover: builtin.cover } : pool;
+        });
+        const remoteIds = new Set(syncedRemote.map((pool) => pool.id));
         const candidates = [...local.map(toSharedPool), ...builtins]
           .filter((pool, index, all) => all.findIndex((item) => item.id === pool.id) === index);
         const missing = candidates.filter((pool) => !remoteIds.has(pool.id));
@@ -61,7 +69,7 @@ function GachaPage() {
           console.error("部分公共卡池保存失败，将在下次同步时重试");
         }
         if (cancelled) return;
-        useNotes.getState().mergeSharedPools([...remote, ...missing]);
+        useNotes.getState().mergeSharedPools([...syncedRemote, ...missing]);
       } catch (error) {
         console.error("公共卡池同步失败", error);
       }
