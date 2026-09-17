@@ -235,7 +235,7 @@ export function portraitSrc(name: string) {
       "黄盖": "/portraits/huang-gai.png",
       "孔融": "/portraits/kong-rong.png",
       "刘璋": "/portraits/liu-zhang.png",
-      "法正": "/portraits/fa-zheng-v4.png",
+      "法正": "/portraits/fa-zheng-v5.png",
       "简雍": "/portraits/jian-yong-v3.png",
       "庞羲": "/portraits/pang-xi.png",
       "祢衡": "/portraits/ni-heng.png",
