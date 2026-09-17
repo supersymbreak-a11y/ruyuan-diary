@@ -116,12 +116,18 @@ type NotesState = NotesData & {
 
 function normalizePools(pools: Pool[]): Pool[] {
   const permanent = pools.find((pool) => pool.id === "permanent") ?? { ...DEFAULT_POOLS[0] };
+  const builtinCovers = new Map(
+    DEFAULT_POOLS.filter((pool) => pool.cover).map((pool) => [pool.id, pool.cover]),
+  );
   return [
     { ...permanent, type: "permanent", archived: false },
     ...pools.filter((pool) => pool.id !== "permanent" && pool.id !== "limited-current").map((pool): Pool => {
       const type: PoolType = pool.type === "anniversary" ? "anniversary" : "limited";
       return {
         ...pool,
+        // Apply newly bundled covers to existing local records that were
+        // created before the banner assets were added.
+        cover: builtinCovers.get(pool.id) ?? pool.cover,
         type,
         upNames: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upNames : [],
         upPity: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upPity : 0,
