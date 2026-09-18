@@ -18,6 +18,18 @@ export function coverSrc(id: string) {
   return id;
 }
 
+const STATIC_AI_BANNER_NAMES = new Set([
+  "绣衣天下", "王侯秉德", "东阁待贤", "九门磔攘", "云雨滂润", "击金鸣鼓", "却月凌风",
+  "壑林邀月", "天封孤狼", "天道不逾", "奉天华盖", "契阔谈宴", "异才奇士", "弓箭江东",
+  "弹剑酿花", "弹香展骥", "彀弓衔刃", "形气复生", "形谍成光", "暮燕翻雷", "桓桓先征",
+  "欺天罔地", "深藏北斗", "游说贤士", "绮花隐豹", "腾陵张胆", "英徽弥亮", "蛇蟒之蛰",
+  "长生之术", "珠渊玉水", "白日昭只", "织囊画诗", "金相玉质", "铁弦千钧", "风兴云蒸", "谨司天英",
+]);
+
+export function staticAiCoverForPool(name: string) {
+  return STATIC_AI_BANNER_NAMES.has(name) ? `/covers/ai/${name}.png` : undefined;
+}
+
 // Keep enough pixels for high-density displays. The banner is shown wider
 // than 720px in the pool editor and on desktop, so the old 720x220 output
 // looked visibly soft after scaling up.
@@ -82,7 +94,7 @@ export const DEFAULT_POOLS = [
     pity: 0,
     upPity: 0,
     guaranteedUp: false,
-    cover: "",
+    cover: "/covers/xiu-yi-tian-xia-v2.png",
     archived: false,
     createdAt: "2024-09-26T00:00:00.000Z",
   },

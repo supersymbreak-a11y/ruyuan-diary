@@ -10,7 +10,7 @@ import { IconPulls, IconSsr, IconTrophy } from "@/components/stat-icons";
 import { Button } from "@/components/ui/button";
 import { formatAvg, overviewStats, poolStats } from "@/lib/stats";
 import { useNotes, type Pool } from "@/lib/store";
-import { DEFAULT_POOLS } from "@/lib/game-data";
+import { DEFAULT_POOLS, staticAiCoverForPool } from "@/lib/game-data";
 import { listSharedPools, saveSharedPool, toSharedPool } from "@/lib/shared-pools";
 
 export const Route = createFileRoute("/")({ component: GachaRoute });
@@ -53,7 +53,8 @@ function GachaPage() {
         const builtinById = new Map(builtins.map((pool) => [pool.id, pool]));
         const syncedRemote = remote.map((pool) => {
           const builtin = builtinById.get(pool.id);
-          return builtin?.cover ? { ...pool, cover: builtin.cover } : pool;
+          const staticCover = staticAiCoverForPool(pool.name);
+          return staticCover ? { ...pool, cover: staticCover } : (builtin?.cover ? { ...pool, cover: builtin.cover } : pool);
         });
         const remoteIds = new Set(syncedRemote.map((pool) => pool.id));
         const candidates = [...local.map(toSharedPool), ...builtins]
