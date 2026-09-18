@@ -38,7 +38,7 @@ export function PoolCard({
               className={cn(
                 "h-full w-full origin-left scale-[1.04] object-cover",
                 pool.name === "欺天罔地"
-                  ? "object-[35%_center]"
+                  ? "object-left"
                   : pool.name === "弹剑酿花"
                     ? "object-right"
                     : "object-left",
