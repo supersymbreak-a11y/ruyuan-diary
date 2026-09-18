@@ -26,7 +26,7 @@ export function PoolCard({
       <button
         type="button"
         onClick={onOpen}
-        className="relative flex min-w-0 flex-1 rounded-l-2xl bg-neutral-400 text-left"
+        className="relative flex min-w-0 flex-1 overflow-hidden rounded-l-2xl bg-neutral-400 text-left"
         aria-label={`${pool.name}详情`}
         aria-expanded={expanded}
       >
