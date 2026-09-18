@@ -36,7 +36,7 @@ export function PoolCard({
               src={coverSrc(pool.cover)}
               alt=""
               className={cn(
-                "h-full w-full object-cover",
+                "h-full w-full origin-left scale-[1.04] object-cover",
                 ["弹剑酿花", "欺天罔地"].includes(pool.name) ? "object-right" : "object-left",
               )}
             />
