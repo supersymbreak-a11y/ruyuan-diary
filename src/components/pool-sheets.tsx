@@ -743,12 +743,12 @@ const AGENT_FILTER_TAGS: Record<string, { elements: string[]; jobs: string[] }> 
   夏侯惇: { elements: ["地"], jobs: ["龙盾"] }, 张仲景: { elements: ["地"], jobs: ["岐黄"] }, 刘璋: { elements: ["地"], jobs: ["神纪"] }, 董白: { elements: ["地"], jobs: ["神纪"] }, 荀攸: { elements: ["地"], jobs: ["诡道"] }, 戏学: { elements: ["地"], jobs: ["诡道"] },
   太史慈: { elements: ["风"], jobs: ["破军"] }, 张飞: { elements: ["风"], jobs: ["破军"] },
   张昭: { elements: ["风"], jobs: ["神纪"] }, 张邈: { elements: ["风"], jobs: ["神纪"] }, 曹丕: { elements: ["风"], jobs: ["诡道"] }, 庞羲: { elements: ["风"], jobs: ["诡道"] }, 曹植: { elements: ["风"], jobs: ["诡道"] }, 郭嘉: { elements: ["风"], jobs: ["诡道"] },
-  诸葛瑾: { elements: ["水"], jobs: ["破军"] }, 孔融: { elements: ["水"], jobs: ["神纪"] }, 刘豹: { elements: ["水"], jobs: ["神纪"] }, 令狐茂: { elements: ["水"], jobs: ["神纪"] }, 周瑜: { elements: ["水"], jobs: ["神纪"] }, 王粲: { elements: ["水"], jobs: ["神纪"] },
+  诸葛瑾: { elements: ["水"], jobs: ["破军"] }, 孔融: { elements: ["水"], jobs: ["神纪"] }, 刘豹: { elements: ["水"], jobs: ["神纪"] }, 令狐茂: { elements: ["水"], jobs: ["神纪"] }, 周瑜: { elements: ["水"], jobs: ["神纪"] }, 王粲: { elements: ["水"], jobs: ["神纪"] }, 简雍: { elements: ["水"], jobs: ["神纪"] },
   士燮: { elements: ["水"], jobs: ["诡道"] }, 刘繇: { elements: ["水"], jobs: ["诡道"] }, 甘宁: { elements: ["水"], jobs: ["诡道"] }, 蔡琰: { elements: ["水"], jobs: ["诡道"] }, 鲁肃: { elements: ["水"], jobs: ["诡道"] },
   庞德: { elements: ["水"], jobs: ["破军"] }, 郭女王: { elements: ["水"], jobs: ["破军"] },
   夏侯渊: { elements: ["阳"], jobs: ["破军"] }, 朱然: { elements: ["阳"], jobs: ["龙盾"] }, 黄月英: { elements: ["阳"], jobs: ["龙盾"] }, 董奉: { elements: ["阳"], jobs: ["岐黄"] }, 华佗: { elements: ["阳"], jobs: ["岐黄"] }, 诸葛亮: { elements: ["阳"], jobs: ["神纪"] }, 祢衡: { elements: ["阳"], jobs: ["神纪"] }, 徐庶: { elements: ["阳"], jobs: ["神纪"] }, 庞统: { elements: ["阳"], jobs: ["神纪"] }, 杨修: { elements: ["阳"], jobs: ["神纪"] },
   张绣: { elements: ["阴"], jobs: ["破军"] }, 满宠: { elements: ["阴"], jobs: ["破军"] }, 虞翻: { elements: ["阴"], jobs: ["破军"] }, 张角: { elements: ["阴"], jobs: ["破军"] },
-  司马徽: { elements: ["阴"], jobs: ["诡道"] }, 黄盖: { elements: ["阴"], jobs: ["诡道"] }, 张闿: { elements: ["阴"], jobs: ["诡道"] }, 张鲁: { elements: ["阴"], jobs: ["诡道"] }, 葛洪: { elements: ["阴"], jobs: ["诡道"] }, 贾诩: { elements: ["阴"], jobs: ["诡道"] },
+  司马徽: { elements: ["阴"], jobs: ["诡道"] }, 黄盖: { elements: ["阴"], jobs: ["诡道"] }, 张闿: { elements: ["阴"], jobs: ["诡道"] }, 张鲁: { elements: ["阴"], jobs: ["诡道"] }, 葛洪: { elements: ["阴"], jobs: ["诡道"] }, 贾诩: { elements: ["阴"], jobs: ["诡道"] }, 法正: { elements: ["阴"], jobs: ["神纪"] },
 };
 
 function AgentPickerSheet({
