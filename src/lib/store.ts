@@ -501,7 +501,7 @@ export const useNotes = create<NotesState>()(
         const copper = parsed.resources?.copper ?? 0;
         set({
           nickname: base.nickname,
-          pools: base.pools,
+          pools: Array.isArray(parsed.pools) ? normalizePools(parsed.pools) : base.pools,
           pulls: parsed.pulls ?? [],
           resources: {
             whiteGold: parsed.resources?.whiteGold ?? 0,

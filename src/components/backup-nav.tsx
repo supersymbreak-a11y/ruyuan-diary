@@ -14,7 +14,8 @@ export function BackupNavItem() {
   const exportBackup = () => {
     const state = useNotes.getState();
     const payload = {
-      version: 2,
+      version: 3,
+      pools: state.pools,
       pulls: state.pulls,
       resources: state.resources,
       ledger: state.ledger,
