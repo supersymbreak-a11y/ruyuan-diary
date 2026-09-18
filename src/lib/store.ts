@@ -120,7 +120,7 @@ function normalizePools(pools: Pool[]): Pool[] {
     DEFAULT_POOLS.filter((pool) => pool.cover).map((pool) => [pool.id, pool.cover]),
   );
   return [
-    { ...permanent, type: "permanent", archived: false },
+    { ...permanent, cover: staticAiCoverForPool(permanent.name) ?? permanent.cover, type: "permanent", archived: false },
     ...pools.filter((pool) => pool.id !== "permanent" && pool.id !== "limited-current").map((pool): Pool => {
       const type: PoolType = pool.type === "anniversary" ? "anniversary" : "limited";
       return {
