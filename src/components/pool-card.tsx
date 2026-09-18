@@ -46,7 +46,7 @@ export function PoolCard({
             {pool.name}
           </span>
         </div>
-        <div className="pool-stats-panel relative flex min-w-0 flex-1 flex-col justify-center gap-1 px-1 text-card">
+        <div className="pool-stats-panel relative flex min-w-0 flex-1 flex-col justify-center gap-1 pl-2 pr-1 text-card">
           <StatLine label="总次数" value={stats.pulls} />
           <StatLine label="总绝密数" value={stats.ssr} />
           <StatLine

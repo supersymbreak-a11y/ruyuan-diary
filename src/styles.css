@@ -133,13 +133,13 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      transparent 24%,
-      color-mix(in srgb, var(--color-banner) 6%, transparent) 30%,
-      color-mix(in srgb, var(--color-banner) 18%, transparent) 37%,
-      color-mix(in srgb, var(--color-banner) 38%, transparent) 44%,
-      color-mix(in srgb, var(--color-banner) 66%, transparent) 51%,
-      color-mix(in srgb, var(--color-banner) 88%, transparent) 57%,
-      var(--color-banner) 60%,
+      transparent 26%,
+      color-mix(in srgb, var(--color-banner) 6%, transparent) 32%,
+      color-mix(in srgb, var(--color-banner) 18%, transparent) 39%,
+      color-mix(in srgb, var(--color-banner) 38%, transparent) 46%,
+      color-mix(in srgb, var(--color-banner) 66%, transparent) 53%,
+      color-mix(in srgb, var(--color-banner) 88%, transparent) 59%,
+      var(--color-banner) 62%,
       var(--color-banner) 100%
     );
   }
