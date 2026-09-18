@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { uid } from "./utils";
 import { getGameDate, getGameWeekId } from "./game-date";
-import { DEFAULT_POOLS, type ResourceKey } from "./game-data";
+import { DEFAULT_POOLS, staticAiCoverForPool, type ResourceKey } from "./game-data";
 
 export type PoolType = "permanent" | "anniversary" | "limited";
 
@@ -127,7 +127,7 @@ function normalizePools(pools: Pool[]): Pool[] {
         ...pool,
         // Apply newly bundled covers to existing local records that were
         // created before the banner assets were added.
-        cover: builtinCovers.get(pool.id) ?? pool.cover,
+        cover: staticAiCoverForPool(pool.name) ?? builtinCovers.get(pool.id) ?? pool.cover,
         type,
         upNames: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upNames : [],
         upPity: type === "limited" || pool.id === "anniversary-yuan-men-qian-jiang" ? pool.upPity : 0,
