@@ -441,7 +441,7 @@ const STATS_COLOR_DIVISIONS: Partial<Record<ResourceKey, Partial<Record<LedgerSi
 
 const reasonColorAtHue = (hue: number) => {
   const normalizedHue = ((hue % 360) + 360) % 360;
-  return `oklch(78% 0.12 ${normalizedHue})`;
+  return `oklch(78% 0.15 ${normalizedHue})`;
 };
 
 function reasonColorAtIndex(index: number, key: ResourceKey, side: LedgerSide) {
