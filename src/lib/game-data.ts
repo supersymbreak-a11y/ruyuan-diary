@@ -433,11 +433,10 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
 }
 
 const reasonColorAtHue = (hue: number) => {
-  // Keep the same lightness as the palette, but make yellow read as a clean,
-  // highlighter-like yellow instead of the muted olive produced at low chroma.
+  // Use the user's selected HSB 50°, 63%, 100% yellow for the yellow band.
   const normalizedHue = ((hue % 360) + 360) % 360;
-  const chroma = normalizedHue >= 75 && normalizedHue <= 105 ? 0.18 : 0.1;
-  return `oklch(82% ${chroma} ${normalizedHue})`;
+  if (normalizedHue >= 75 && normalizedHue <= 105) return "#FFE55F";
+  return `oklch(82% 0.1 ${normalizedHue})`;
 };
 
 // Spread the visible reasons around the full hue wheel for every stats view.
