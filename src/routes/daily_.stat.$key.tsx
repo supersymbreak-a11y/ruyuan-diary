@@ -82,8 +82,8 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     () =>
       [...rows]
         .sort((a, b) => b.pct - a.pct)
-        .map((row, index) => ({ ...row, color: reasonColor(row.name, index) })),
-    [rows],
+        .map((row, index) => ({ ...row, color: reasonColor(row.name, index, resourceKey, side) })),
+    [rows, resourceKey, side],
   );
   const colorByName = useMemo(
     () => new Map(chartRows.map((row) => [row.name, row.color] as const)),
@@ -164,11 +164,11 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
           </div>
 
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[12px] text-ink">
-            {chartRows.map((r, index) => (
+            {chartRows.map((r) => (
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"
-                  style={{ background: reasonColor(r.name, index) }}
+                  style={{ background: r.color }}
                 />
                 {r.name}
               </li>

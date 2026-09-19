@@ -432,45 +432,27 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const WHITE_GOLD_INCOME_REASON_ORDER = reasonsFor("whiteGold", "income").map(({ id }) => id);
-const STATS_COLOR_COUNT = WHITE_GOLD_INCOME_REASON_ORDER.length;
-const STATS_COLOR_HUE_STEP = 360 / STATS_COLOR_COUNT;
-// Walk the hue wheel in equal steps, starting at red.
-const STATS_COLOR_START_HUE = 0;
-const extendedStatsColorHues: number[] = Array.from(
-  { length: STATS_COLOR_COUNT },
-  (_, index) => (STATS_COLOR_START_HUE + index * STATS_COLOR_HUE_STEP + 360) % 360,
-);
+const STATS_COLOR_DIVISIONS: Partial<Record<ResourceKey, Partial<Record<LedgerSide, number>>>> = {
+  whiteGold: { income: 19, expense: 15 },
+  tianji: { income: 11 },
+  fuchuan: { income: 15 },
+  zhuyu: { income: 6 },
+};
 
 const reasonColorAtHue = (hue: number) => {
   const normalizedHue = ((hue % 360) + 360) % 360;
-  return `oklch(82% 0.1 ${normalizedHue})`;
+  return `oklch(78% 0.12 ${normalizedHue})`;
 };
 
-function reasonColorAtIndex(index: number) {
-  while (extendedStatsColorHues.length <= index) {
-    const orderedHues = [...extendedStatsColorHues].sort((a, b) => a - b);
-    let widestGap = -1;
-    let nextHue = 0;
-    for (let i = 0; i < orderedHues.length; i += 1) {
-      const start = orderedHues[i]!;
-      const end = i === orderedHues.length - 1 ? orderedHues[0]! + 360 : orderedHues[i + 1]!;
-      const gap = end - start;
-      if (gap > widestGap) {
-        widestGap = gap;
-        nextHue = (start + gap / 2) % 360;
-      }
-    }
-    extendedStatsColorHues.push(nextHue);
-  }
-
-  return reasonColorAtHue(extendedStatsColorHues[index]!);
+function reasonColorAtIndex(index: number, key: ResourceKey, side: LedgerSide) {
+  const divisions = STATS_COLOR_DIVISIONS[key]?.[side] ?? reasonsFor(key, side).length;
+  // Red is the first sector's midpoint; each rank advances counterclockwise by one sector.
+  return reasonColorAtHue((index * 360) / Math.max(1, divisions));
 }
 
-// Assign active sources sequential palette slots; callers provide indexes compacted
-// from sources that have actually had entries, so inactive sources reserve no colors.
-export function reasonColor(reason: string, index?: number) {
-  if (index !== undefined) return reasonColorAtIndex(index);
+// Assign the rank-ordered source a sector-midpoint color from its resource's hue wheel.
+export function reasonColor(reason: string, index?: number, key?: ResourceKey, side?: LedgerSide) {
+  if (index !== undefined && key && side) return reasonColorAtIndex(index, key, side);
 
   // Stable fallback for callers that don't have a visible-list position.
   let hash = 0;
