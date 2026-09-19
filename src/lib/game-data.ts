@@ -432,7 +432,13 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const reasonColorAtHue = (hue: number) => `oklch(82% 0.1 ${hue})`;
+const reasonColorAtHue = (hue: number) => {
+  // Keep the same lightness as the palette, but make yellow read as a clean,
+  // highlighter-like yellow instead of the muted olive produced at low chroma.
+  const normalizedHue = ((hue % 360) + 360) % 360;
+  const chroma = normalizedHue >= 75 && normalizedHue <= 105 ? 0.18 : 0.1;
+  return `oklch(82% ${chroma} ${normalizedHue})`;
+};
 
 // Spread the visible reasons around the full hue wheel for every stats view.
 // Equal OKLCH lightness/chroma keeps the rainbow bright without harsh saturation.
