@@ -40,7 +40,7 @@ export function PoolCard({
                 pool.name === "欺天罔地"
                   ? "origin-left -translate-x-3 scale-[1.08] object-left"
                   : pool.name === "弹剑酿花"
-                    ? "object-right"
+                    ? "object-left"
                     : "object-left",
               )}
             />
