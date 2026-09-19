@@ -432,8 +432,18 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const STATS_COLOR_HUES = [350, 26, 62, 98, 134, 170, 206, 242, 278, 314] as const;
-const extendedStatsColorHues: number[] = [...STATS_COLOR_HUES];
+const WHITE_GOLD_INCOME_REASON_ORDER = reasonsFor("whiteGold", "income").map(({ id }) => id);
+const WHITE_GOLD_INCOME_REASON_INDEX = new Map(
+  WHITE_GOLD_INCOME_REASON_ORDER.map((reason, index) => [reason, index]),
+);
+const STATS_COLOR_COUNT = WHITE_GOLD_INCOME_REASON_ORDER.length;
+const STATS_COLOR_HUE_STEP = 360 / STATS_COLOR_COUNT;
+// Keep the existing vivid yellow at palette slot 3 while distributing all 19 hues evenly.
+const STATS_COLOR_START_HUE = 98 - 3 * STATS_COLOR_HUE_STEP;
+const extendedStatsColorHues: number[] = Array.from(
+  { length: STATS_COLOR_COUNT },
+  (_, index) => (STATS_COLOR_START_HUE + index * STATS_COLOR_HUE_STEP + 360) % 360,
+);
 
 const reasonColorAtHue = (hue: number) => {
   const normalizedHue = ((hue % 360) + 360) % 360;
@@ -462,12 +472,16 @@ function reasonColorAtIndex(index: number) {
   return reasonColorAtHue(extendedStatsColorHues[index]!);
 }
 
-// Keep every stats view in the same order as the white-gold income palette.
-// Pages assign colors independently by sorted row position, so colors may repeat between pages.
+// Assign white-gold sources a stable color by name, including sources with no entries yet.
+// Other pages use the same evenly-spaced palette by row position.
 export function reasonColor(reason: string, index?: number) {
-  if (index !== undefined) {
-    return reasonColorAtIndex(index);
+  const reasonIndex = WHITE_GOLD_INCOME_REASON_INDEX.get(reason);
+  if (reasonIndex !== undefined) return reasonColorAtIndex(reasonIndex);
+  if (reason === "兑换白金币") {
+    const conversionIndex = WHITE_GOLD_INCOME_REASON_INDEX.get("茱萸转化");
+    if (conversionIndex !== undefined) return reasonColorAtIndex(conversionIndex);
   }
+  if (index !== undefined) return reasonColorAtIndex(index);
 
   // Stable fallback for callers that don't have a visible-list position.
   let hash = 0;
