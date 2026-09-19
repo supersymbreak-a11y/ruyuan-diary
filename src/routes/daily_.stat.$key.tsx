@@ -7,7 +7,6 @@ import { AppHeader, HydrateGate, PhoneFrame } from "@/components/shell";
 import {
   isResourceKey,
   reasonColor,
-  reasonsFor,
   RESOURCE_META,
   type LedgerSide,
   type ResourceKey,
@@ -79,34 +78,13 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     () => reasonBreakdown(scoped, resourceKey, side),
     [scoped, resourceKey, side],
   );
-  const allTimeRows = useMemo(
-    () => reasonBreakdown(ledger, resourceKey, side),
-    [ledger, resourceKey, side],
-  );
-  const colorIndexByName = useMemo(() => {
-    const activeNames = new Set(allTimeRows.map((row) => row.name));
-    const orderedNames = reasonsFor(resourceKey, side).map(({ id }) =>
-      resourceKey === "whiteGold" && side === "income" && id === "每日茱萸"
-        ? "茱萸转化"
-        : id,
-    );
-    const indices = new Map<string, number>();
-    for (const name of orderedNames) {
-      if (activeNames.has(name) && !indices.has(name)) indices.set(name, indices.size);
-    }
-    for (const row of allTimeRows) {
-      if (!indices.has(row.name)) indices.set(row.name, indices.size);
-    }
-    return indices;
-  }, [allTimeRows, resourceKey, side]);
   const chartRows = useMemo(
-    () =>
-      [...rows].sort(
-        (a, b) =>
-          (colorIndexByName.get(a.name) ?? Number.MAX_SAFE_INTEGER) -
-          (colorIndexByName.get(b.name) ?? Number.MAX_SAFE_INTEGER),
-      ),
-    [colorIndexByName, rows],
+    () => [...rows].sort((a, b) => b.value - a.value),
+    [rows],
+  );
+  const colorIndexByName = useMemo(
+    () => new Map(chartRows.map((row, index) => [row.name, index])),
+    [chartRows],
   );
   const total = rows.reduce((s, r) => s + r.value, 0);
   const label = periodLabel(effectivePeriod, effectiveDim);
