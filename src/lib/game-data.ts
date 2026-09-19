@@ -435,7 +435,7 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
 const WHITE_GOLD_INCOME_REASON_ORDER = reasonsFor("whiteGold", "income").map(({ id }) => id);
 const STATS_COLOR_COUNT = WHITE_GOLD_INCOME_REASON_ORDER.length;
 const STATS_COLOR_HUE_STEP = 360 / STATS_COLOR_COUNT;
-// Start at red, keeping the vivid yellow at palette slot 3 while distributing hues evenly.
+// Walk the hue wheel in equal steps, starting at red.
 const STATS_COLOR_START_HUE = 0;
 const extendedStatsColorHues: number[] = Array.from(
   { length: STATS_COLOR_COUNT },
@@ -464,8 +464,6 @@ function reasonColorAtIndex(index: number) {
     extendedStatsColorHues.push(nextHue);
   }
 
-  // Keep the white-gold income page's reference yellow at its original position.
-  if (index === 3) return "#FFE55F";
   return reasonColorAtHue(extendedStatsColorHues[index]!);
 }
 

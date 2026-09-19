@@ -79,7 +79,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     [scoped, resourceKey, side],
   );
   const chartRows = useMemo(
-    () => [...rows].sort((a, b) => b.value - a.value),
+    () => [...rows].sort((a, b) => b.pct - a.pct),
     [rows],
   );
   const colorIndexByName = useMemo(
@@ -152,7 +152,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     }
                   >
                     {chartRows.map((r, index) => (
-                      <Cell key={r.name} fill={reasonColor(r.name, colorIndexByName.get(r.name) ?? index)} />
+                      <Cell key={r.name} fill={reasonColor(r.name, index)} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -165,7 +165,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"
-                  style={{ background: reasonColor(r.name, colorIndexByName.get(r.name) ?? index) }}
+                  style={{ background: reasonColor(r.name, index) }}
                 />
                 {r.name}
               </li>
