@@ -57,13 +57,18 @@ export function AddRecordSheet({
   const [key, setKey] = useState<ResourceKey>("whiteGold");
   const [side, setSide] = useState<LedgerSide>("income");
   const [amount, setAmount] = useState("");
-  const [reason, setReason] = useState("月卡");
-  const [custom, setCustom] = useState("");
+  const [reasonSelections, setReasonSelections] = useState<Record<string, string>>({
+    "whiteGold:income": "月卡",
+  });
+  const [customSelections, setCustomSelections] = useState<Record<string, string>>({});
   const [date, setDate] = useState(getGameDate);
   const [autoEnabled, setAutoEnabled] = useState(false);
   const reasons = reasonsFor(key, side).filter(
     (item) => !(side === "expense" && ["tianji", "fuchuan", "zhuyu"].includes(key) && item.id === "其他"),
   );
+  const reasonContext = `${key}:${side}`;
+  const reason = reasonSelections[reasonContext] ?? reasons[0]?.id ?? "其他";
+  const custom = customSelections[reasonContext] ?? "";
 
   const applyConversion = (
     source: ResourceKey,
@@ -110,8 +115,8 @@ export function AddRecordSheet({
     setKey("whiteGold");
     setSide("income");
     setAmount("");
-    setReason("月卡");
-    setCustom("");
+    setReasonSelections({ "whiteGold:income": "月卡" });
+    setCustomSelections({});
     setDate(getGameDate());
     setAutoEnabled(false);
   };
@@ -135,7 +140,7 @@ export function AddRecordSheet({
             const n = Math.abs(Math.round(Number(amount) || 0));
             if (!n) return;
             if (autoEnabled && exchangeKind && exchangeUnits.target > 0) {
-              const source = exchangeKind === "zhuyu-income" ? "zhuyu" : "whiteGold";
+              const source = exchangeKind === "zhuyu" || exchangeKind === "zhuyu-income" ? "zhuyu" : "whiteGold";
               const target = exchangeKind === "zhuyu" || exchangeKind === "zhuyu-income" ? "whiteGold" : exchangeKind.includes("tianji") ? "tianji" : "fuchuan";
               applyConversion(source, exchangeUnits.source, target, exchangeUnits.target, target === "whiteGold" ? "白金币" : target === "tianji" ? "天机符传" : "符传");
               onOpenChange(false);
@@ -163,8 +168,6 @@ export function AddRecordSheet({
                 setKey(m.key);
                 setAmount("");
                 setAutoEnabled(false);
-                const next = reasonsFor(m.key, side);
-                if (!next.some((r) => r.id === reason)) setReason(next[0]?.id ?? "其他");
               }}
               className={cn(
                 "rounded-lg py-2 text-[11px] font-medium",
@@ -183,8 +186,6 @@ export function AddRecordSheet({
             setSide(v);
             setAmount("");
             setAutoEnabled(false);
-            const next = reasonsFor(key, v);
-            if (!next.some((r) => r.id === reason)) setReason(next[0]?.id ?? "其他");
           }}
           options={[
             { id: "income" as const, label: "收益" },
@@ -198,7 +199,7 @@ export function AddRecordSheet({
             <button
               key={`${r.side}-${r.id}`}
               type="button"
-              onClick={() => { setReason(r.id); setAmount(""); setAutoEnabled(false); }}
+              onClick={() => { setReasonSelections((current) => ({ ...current, [reasonContext]: r.id })); setAmount(""); setAutoEnabled(false); }}
               className={cn(
                 "h-8 rounded-full px-3 text-xs",
                 reason === r.id
@@ -215,7 +216,7 @@ export function AddRecordSheet({
             className="mt-2"
             placeholder="自定义来源"
             value={custom}
-            onChange={(e) => setCustom(e.target.value)}
+            onChange={(e) => setCustomSelections((current) => ({ ...current, [reasonContext]: e.target.value }))}
           />
         ) : null}
       </Field>

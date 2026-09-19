@@ -432,23 +432,34 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const REASON_COLOR: Record<string, string> = {
-  茱萸转化: "var(--color-chart-1)",
-  月卡: "var(--color-chart-2)",
-  派遣: "var(--color-chart-3)",
-  密探特训: "var(--color-chart-4)",
-  地宫: "var(--color-chart-5)",
-  活动: "var(--color-chart-6)",
-  补偿: "var(--color-chart-7)",
-  "传闻/信赖值": "var(--color-chart-8)",
-  充值: "var(--color-chart-9)",
-  兑换码: "var(--color-chart-10)",
-  招募: "var(--color-gold-deep)",
-  转化白金币: "var(--color-mat-rose)",
-  兑换: "var(--color-hint)",
-  其他: "var(--color-muted-fg)",
-};
+const REASON_PALETTE = [
+  "var(--color-chart-1)",
+  "var(--color-chart-2)",
+  "var(--color-chart-3)",
+  "var(--color-chart-4)",
+  "var(--color-chart-5)",
+  "var(--color-chart-6)",
+  "var(--color-chart-7)",
+  "var(--color-chart-8)",
+  "var(--color-chart-9)",
+  "var(--color-chart-10)",
+  "var(--color-mat-rose)",
+  "var(--color-hint)",
+];
+
+// Assign each built-in ledger reason its own stable palette slot so unrelated
+// categories do not all collapse to the same fallback color in the charts.
+const REASON_COLOR = new Map(
+  [...new Set(LEDGER_REASONS.map((item) => item.id))].map((reason, index) => [
+    reason,
+    REASON_PALETTE[index % REASON_PALETTE.length],
+  ]),
+);
 
 export function reasonColor(reason: string) {
-  return REASON_COLOR[reason] ?? "var(--color-muted-fg)";
+  const known = REASON_COLOR.get(reason);
+  if (known) return known;
+  let hash = 0;
+  for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
+  return REASON_PALETTE[hash % REASON_PALETTE.length];
 }
