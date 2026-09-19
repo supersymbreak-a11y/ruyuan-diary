@@ -64,11 +64,17 @@ export function reasonBreakdown(
     if (e.key !== key) continue;
     if (side === "income" && e.amount <= 0) continue;
     if (side === "expense" && e.amount >= 0) continue;
+    const reason =
+      key === "whiteGold" &&
+      side === "income" &&
+      ["兑换白金币", "每日茱萸", "茱萸转化"].includes(e.reason)
+        ? "茱萸转化"
+        : e.reason;
     const value = Math.abs(e.amount);
-    const cur = bag.get(e.reason) ?? { value: 0, count: 0 };
+    const cur = bag.get(reason) ?? { value: 0, count: 0 };
     cur.value += value;
     cur.count += 1;
-    bag.set(e.reason, cur);
+    bag.set(reason, cur);
   }
   const total = [...bag.values()].reduce((s, v) => s + v.value, 0);
   return [...bag.entries()]
