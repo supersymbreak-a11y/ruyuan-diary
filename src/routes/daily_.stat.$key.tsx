@@ -79,11 +79,14 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     [scoped, resourceKey, side],
   );
   const chartRows = useMemo(
-    () => [...rows].sort((a, b) => b.pct - a.pct),
+    () =>
+      [...rows]
+        .sort((a, b) => b.pct - a.pct)
+        .map((row, index) => ({ ...row, color: reasonColor(row.name, index) })),
     [rows],
   );
-  const colorIndexByName = useMemo(
-    () => new Map(chartRows.map((row, index) => [row.name, index])),
+  const colorByName = useMemo(
+    () => new Map(chartRows.map((row) => [row.name, row.color] as const)),
     [chartRows],
   );
   const total = rows.reduce((s, r) => s + r.value, 0);
@@ -152,7 +155,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     }
                   >
                     {chartRows.map((r, index) => (
-                      <Cell key={r.name} fill={reasonColor(r.name, index)} />
+                      <Cell key={r.name} fill={r.color} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -186,7 +189,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     className="h-full rounded-full"
                     style={{
                       width: `${Math.max(2, r.pct * 100)}%`,
-                      background: reasonColor(r.name, colorIndexByName.get(r.name) ?? index),
+                      background: colorByName.get(r.name) ?? reasonColor(r.name, index),
                     }}
                   />
                 </div>
