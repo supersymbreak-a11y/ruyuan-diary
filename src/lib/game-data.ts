@@ -432,27 +432,15 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const REASON_PALETTE = [
-  "var(--color-chart-1)",
-  "var(--color-chart-2)",
-  "var(--color-chart-3)",
-  "var(--color-chart-4)",
-  "var(--color-chart-5)",
-  "var(--color-chart-6)",
-  "var(--color-chart-7)",
-  "var(--color-chart-8)",
-  "var(--color-chart-9)",
-  "var(--color-chart-10)",
-  "var(--color-mat-rose)",
-  "var(--color-hint)",
-];
+const BUILT_IN_REASONS = [...new Set(LEDGER_REASONS.map((item) => item.id))];
+const reasonColorAtHue = (hue: number) => `oklch(68% 0.15 ${hue})`;
 
 // Assign each built-in ledger reason its own stable palette slot so unrelated
 // categories do not all collapse to the same fallback color in the charts.
 const REASON_COLOR = new Map(
-  [...new Set(LEDGER_REASONS.map((item) => item.id))].map((reason, index) => [
+  BUILT_IN_REASONS.map((reason, index) => [
     reason,
-    REASON_PALETTE[index % REASON_PALETTE.length],
+    reasonColorAtHue((index * 360) / BUILT_IN_REASONS.length),
   ]),
 );
 
@@ -461,5 +449,5 @@ export function reasonColor(reason: string) {
   if (known) return known;
   let hash = 0;
   for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
-  return REASON_PALETTE[hash % REASON_PALETTE.length];
+  return reasonColorAtHue(hash % 360);
 }
