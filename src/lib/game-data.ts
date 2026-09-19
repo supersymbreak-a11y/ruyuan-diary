@@ -432,6 +432,8 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
+const STATS_COLOR_HUES = [350, 26, 62, 98, 134, 170, 206, 242, 278, 314] as const;
+
 const reasonColorAtHue = (hue: number) => {
   // Use the user's selected HSB 50°, 63%, 100% yellow for the yellow band.
   const normalizedHue = ((hue % 360) + 360) % 360;
@@ -439,15 +441,17 @@ const reasonColorAtHue = (hue: number) => {
   return `oklch(82% 0.1 ${normalizedHue})`;
 };
 
-// Spread the visible reasons around the full hue wheel for every stats view.
-// Equal OKLCH lightness/chroma keeps the rainbow bright without harsh saturation.
-export function reasonColor(reason: string, index?: number, total?: number) {
-  if (index !== undefined && total && total > 0) {
-    return reasonColorAtHue((350 + (index * 360) / total) % 360);
+// Keep every stats view in the same order as the white-gold income palette.
+// Pages assign colors independently by sorted row position, so colors can repeat.
+export function reasonColor(reason: string, index?: number) {
+  let paletteIndex: number;
+  if (index !== undefined) {
+    paletteIndex = ((index % STATS_COLOR_HUES.length) + STATS_COLOR_HUES.length) % STATS_COLOR_HUES.length;
+  } else {
+    // Stable fallback for callers that don't have a visible-list position.
+    let hash = 0;
+    for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
+    paletteIndex = hash % STATS_COLOR_HUES.length;
   }
-
-  // Stable fallback for callers that don't have a visible-list position.
-  let hash = 0;
-  for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
-  return reasonColorAtHue((hash % 360));
+  return reasonColorAtHue(STATS_COLOR_HUES[paletteIndex]!);
 }

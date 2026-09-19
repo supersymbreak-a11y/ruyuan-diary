@@ -128,14 +128,23 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     outerRadius={78}
                     paddingAngle={1.5}
                     stroke="none"
-                    label={({ percent }) =>
-                      percent && percent >= 0.035
-                        ? `${(percent * 100).toFixed(2)}%`
-                        : ""
+                    label={({ percent, x, y, textAnchor, fill }) =>
+                      percent && percent >= 0.035 ? (
+                        <text
+                          x={x}
+                          y={y}
+                          textAnchor={textAnchor}
+                          dominantBaseline="middle"
+                          fill={fill}
+                          fontSize={11}
+                        >
+                          {(percent * 100).toFixed(2)}%
+                        </text>
+                      ) : null
                     }
                   >
                     {rows.map((r, index) => (
-                      <Cell key={r.name} fill={reasonColor(r.name, index, rows.length)} />
+                      <Cell key={r.name} fill={reasonColor(r.name, index)} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -148,7 +157,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"
-                  style={{ background: reasonColor(r.name, index, rows.length) }}
+                  style={{ background: reasonColor(r.name, index) }}
                 />
                 {r.name}
               </li>
@@ -169,7 +178,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     className="h-full rounded-full"
                     style={{
                       width: `${Math.max(2, r.pct * 100)}%`,
-                      background: reasonColor(r.name, index, rows.length),
+                      background: reasonColor(r.name, index),
                     }}
                   />
                 </div>
