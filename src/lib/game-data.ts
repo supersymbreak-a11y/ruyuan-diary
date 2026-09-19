@@ -433,9 +433,6 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
 }
 
 const WHITE_GOLD_INCOME_REASON_ORDER = reasonsFor("whiteGold", "income").map(({ id }) => id);
-const WHITE_GOLD_INCOME_REASON_INDEX = new Map(
-  WHITE_GOLD_INCOME_REASON_ORDER.map((reason, index) => [reason, index]),
-);
 const STATS_COLOR_COUNT = WHITE_GOLD_INCOME_REASON_ORDER.length;
 const STATS_COLOR_HUE_STEP = 360 / STATS_COLOR_COUNT;
 // Keep the existing vivid yellow at palette slot 3 while distributing all 19 hues evenly.
@@ -472,15 +469,9 @@ function reasonColorAtIndex(index: number) {
   return reasonColorAtHue(extendedStatsColorHues[index]!);
 }
 
-// Assign white-gold sources a stable color by name, including sources with no entries yet.
-// Other pages use the same evenly-spaced palette by row position.
+// Assign active sources sequential palette slots; callers provide indexes compacted
+// from sources that have actually had entries, so inactive sources reserve no colors.
 export function reasonColor(reason: string, index?: number) {
-  const reasonIndex = WHITE_GOLD_INCOME_REASON_INDEX.get(reason);
-  if (reasonIndex !== undefined) return reasonColorAtIndex(reasonIndex);
-  if (reason === "兑换白金币") {
-    const conversionIndex = WHITE_GOLD_INCOME_REASON_INDEX.get("茱萸转化");
-    if (conversionIndex !== undefined) return reasonColorAtIndex(conversionIndex);
-  }
   if (index !== undefined) return reasonColorAtIndex(index);
 
   // Stable fallback for callers that don't have a visible-list position.

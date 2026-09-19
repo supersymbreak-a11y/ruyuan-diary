@@ -7,6 +7,7 @@ import { AppHeader, HydrateGate, PhoneFrame } from "@/components/shell";
 import {
   isResourceKey,
   reasonColor,
+  reasonsFor,
   RESOURCE_META,
   type LedgerSide,
   type ResourceKey,
@@ -78,6 +79,26 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     () => reasonBreakdown(scoped, resourceKey, side),
     [scoped, resourceKey, side],
   );
+  const allTimeRows = useMemo(
+    () => reasonBreakdown(ledger, resourceKey, side),
+    [ledger, resourceKey, side],
+  );
+  const colorIndexByName = useMemo(() => {
+    const activeNames = new Set(allTimeRows.map((row) => row.name));
+    const orderedNames = reasonsFor(resourceKey, side).map(({ id }) =>
+      resourceKey === "whiteGold" && side === "income" && id === "每日茱萸"
+        ? "茱萸转化"
+        : id,
+    );
+    const indices = new Map<string, number>();
+    for (const name of orderedNames) {
+      if (activeNames.has(name) && !indices.has(name)) indices.set(name, indices.size);
+    }
+    for (const row of allTimeRows) {
+      if (!indices.has(row.name)) indices.set(row.name, indices.size);
+    }
+    return indices;
+  }, [allTimeRows, resourceKey, side]);
   const total = rows.reduce((s, r) => s + r.value, 0);
   const label = periodLabel(effectivePeriod, effectiveDim);
 
@@ -144,7 +165,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     }
                   >
                     {rows.map((r, index) => (
-                      <Cell key={r.name} fill={reasonColor(r.name, index)} />
+                      <Cell key={r.name} fill={reasonColor(r.name, colorIndexByName.get(r.name) ?? index)} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -157,7 +178,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"
-                  style={{ background: reasonColor(r.name, index) }}
+                  style={{ background: reasonColor(r.name, colorIndexByName.get(r.name) ?? index) }}
                 />
                 {r.name}
               </li>
@@ -178,7 +199,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     className="h-full rounded-full"
                     style={{
                       width: `${Math.max(2, r.pct * 100)}%`,
-                      background: reasonColor(r.name, index),
+                      background: reasonColor(r.name, colorIndexByName.get(r.name) ?? index),
                     }}
                   />
                 </div>
