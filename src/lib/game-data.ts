@@ -433,25 +433,44 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
 }
 
 const STATS_COLOR_HUES = [350, 26, 62, 98, 134, 170, 206, 242, 278, 314] as const;
+const extendedStatsColorHues: number[] = [...STATS_COLOR_HUES];
 
 const reasonColorAtHue = (hue: number) => {
-  // Use the user's selected HSB 50°, 63%, 100% yellow for the yellow band.
   const normalizedHue = ((hue % 360) + 360) % 360;
-  if (normalizedHue >= 75 && normalizedHue <= 105) return "#FFE55F";
   return `oklch(82% 0.1 ${normalizedHue})`;
 };
 
-// Keep every stats view in the same order as the white-gold income palette.
-// Pages assign colors independently by sorted row position, so colors can repeat.
-export function reasonColor(reason: string, index?: number) {
-  let paletteIndex: number;
-  if (index !== undefined) {
-    paletteIndex = ((index % STATS_COLOR_HUES.length) + STATS_COLOR_HUES.length) % STATS_COLOR_HUES.length;
-  } else {
-    // Stable fallback for callers that don't have a visible-list position.
-    let hash = 0;
-    for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
-    paletteIndex = hash % STATS_COLOR_HUES.length;
+function reasonColorAtIndex(index: number) {
+  while (extendedStatsColorHues.length <= index) {
+    const orderedHues = [...extendedStatsColorHues].sort((a, b) => a - b);
+    let widestGap = -1;
+    let nextHue = 0;
+    for (let i = 0; i < orderedHues.length; i += 1) {
+      const start = orderedHues[i]!;
+      const end = i === orderedHues.length - 1 ? orderedHues[0]! + 360 : orderedHues[i + 1]!;
+      const gap = end - start;
+      if (gap > widestGap) {
+        widestGap = gap;
+        nextHue = (start + gap / 2) % 360;
+      }
+    }
+    extendedStatsColorHues.push(nextHue);
   }
-  return reasonColorAtHue(STATS_COLOR_HUES[paletteIndex]!);
+
+  // Keep the white-gold income page's reference yellow at its original position.
+  if (index === 3) return "#FFE55F";
+  return reasonColorAtHue(extendedStatsColorHues[index]!);
+}
+
+// Keep every stats view in the same order as the white-gold income palette.
+// Pages assign colors independently by sorted row position, so colors may repeat between pages.
+export function reasonColor(reason: string, index?: number) {
+  if (index !== undefined) {
+    return reasonColorAtIndex(index);
+  }
+
+  // Stable fallback for callers that don't have a visible-list position.
+  let hash = 0;
+  for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
+  return reasonColorAtHue(hash * 137.507764);
 }
