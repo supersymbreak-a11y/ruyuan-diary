@@ -99,6 +99,15 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
     }
     return indices;
   }, [allTimeRows, resourceKey, side]);
+  const chartRows = useMemo(
+    () =>
+      [...rows].sort(
+        (a, b) =>
+          (colorIndexByName.get(a.name) ?? Number.MAX_SAFE_INTEGER) -
+          (colorIndexByName.get(b.name) ?? Number.MAX_SAFE_INTEGER),
+      ),
+    [colorIndexByName, rows],
+  );
   const total = rows.reduce((s, r) => s + r.value, 0);
   const label = periodLabel(effectivePeriod, effectiveDim);
 
@@ -140,7 +149,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
               <ResponsiveContainer>
                 <PieChart>
                   <Pie
-                    data={rows}
+                    data={chartRows}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
@@ -164,7 +173,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                       ) : null
                     }
                   >
-                    {rows.map((r, index) => (
+                    {chartRows.map((r, index) => (
                       <Cell key={r.name} fill={reasonColor(r.name, colorIndexByName.get(r.name) ?? index)} />
                     ))}
                   </Pie>
@@ -174,7 +183,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
           </div>
 
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[12px] text-ink">
-            {rows.map((r, index) => (
+            {chartRows.map((r, index) => (
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"

@@ -435,8 +435,8 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
 const WHITE_GOLD_INCOME_REASON_ORDER = reasonsFor("whiteGold", "income").map(({ id }) => id);
 const STATS_COLOR_COUNT = WHITE_GOLD_INCOME_REASON_ORDER.length;
 const STATS_COLOR_HUE_STEP = 360 / STATS_COLOR_COUNT;
-// Keep the existing vivid yellow at palette slot 3 while distributing all 19 hues evenly.
-const STATS_COLOR_START_HUE = 98 - 3 * STATS_COLOR_HUE_STEP;
+// Start at red, keeping the vivid yellow at palette slot 3 while distributing hues evenly.
+const STATS_COLOR_START_HUE = 0;
 const extendedStatsColorHues: number[] = Array.from(
   { length: STATS_COLOR_COUNT },
   (_, index) => (STATS_COLOR_START_HUE + index * STATS_COLOR_HUE_STEP + 360) % 360,
