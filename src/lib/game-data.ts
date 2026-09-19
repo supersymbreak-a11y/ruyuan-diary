@@ -432,22 +432,17 @@ export function reasonsFor(key: ResourceKey, side: LedgerSide) {
   );
 }
 
-const BUILT_IN_REASONS = [...new Set(LEDGER_REASONS.map((item) => item.id))];
-const reasonColorAtHue = (hue: number) => `oklch(68% 0.15 ${hue})`;
+const reasonColorAtHue = (hue: number) => `oklch(82% 0.1 ${hue})`;
 
-// Assign each built-in ledger reason its own stable palette slot so unrelated
-// categories do not all collapse to the same fallback color in the charts.
-const REASON_COLOR = new Map(
-  BUILT_IN_REASONS.map((reason, index) => [
-    reason,
-    reasonColorAtHue((index * 360) / BUILT_IN_REASONS.length),
-  ]),
-);
+// Spread the visible reasons around the full hue wheel for every stats view.
+// Equal OKLCH lightness/chroma keeps the rainbow bright without harsh saturation.
+export function reasonColor(reason: string, index?: number, total?: number) {
+  if (index !== undefined && total && total > 0) {
+    return reasonColorAtHue((350 + (index * 360) / total) % 360);
+  }
 
-export function reasonColor(reason: string) {
-  const known = REASON_COLOR.get(reason);
-  if (known) return known;
+  // Stable fallback for callers that don't have a visible-list position.
   let hash = 0;
   for (const char of reason) hash = (hash * 31 + char.codePointAt(0)!) >>> 0;
-  return reasonColorAtHue(hash % 360);
+  return reasonColorAtHue((hash % 360));
 }

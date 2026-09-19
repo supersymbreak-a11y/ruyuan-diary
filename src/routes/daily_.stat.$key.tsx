@@ -134,8 +134,8 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                         : ""
                     }
                   >
-                    {rows.map((r) => (
-                      <Cell key={r.name} fill={reasonColor(r.name)} />
+                    {rows.map((r, index) => (
+                      <Cell key={r.name} fill={reasonColor(r.name, index, rows.length)} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -144,11 +144,11 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
           </div>
 
           <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[12px] text-ink">
-            {rows.map((r) => (
+            {rows.map((r, index) => (
               <li key={r.name} className="flex items-center gap-1.5">
                 <span
                   className="size-2.5 rounded-full"
-                  style={{ background: reasonColor(r.name) }}
+                  style={{ background: reasonColor(r.name, index, rows.length) }}
                 />
                 {r.name}
               </li>
@@ -156,7 +156,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
           </ul>
 
           <ul className="mt-6 space-y-5">
-            {rows.map((r) => (
+            {rows.map((r, index) => (
               <li key={r.name}>
                 <div className="flex items-baseline justify-between">
                   <span className="text-[15px] font-medium text-brown-deep">{r.name}</span>
@@ -169,7 +169,7 @@ function StatPage({ resourceKey }: { resourceKey: ResourceKey }) {
                     className="h-full rounded-full"
                     style={{
                       width: `${Math.max(2, r.pct * 100)}%`,
-                      background: reasonColor(r.name),
+                      background: reasonColor(r.name, index, rows.length),
                     }}
                   />
                 </div>
