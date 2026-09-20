@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   RESOURCE_META,
   TASKS,
@@ -42,6 +43,112 @@ function Segment<T extends string>({
           {o.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+function CalendarPicker({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const selected = new Date(`${value}T12:00:00`);
+  const [open, setOpen] = useState(false);
+  const [month, setMonth] = useState(() => new Date(selected.getFullYear(), selected.getMonth(), 1));
+  const firstDay = new Date(month.getFullYear(), month.getMonth(), 1);
+  const gridStart = new Date(firstDay);
+  gridStart.setDate(firstDay.getDate() - ((firstDay.getDay() + 6) % 7));
+  const days = Array.from({ length: 42 }, (_, index) => {
+    const day = new Date(gridStart);
+    day.setDate(gridStart.getDate() + index);
+    return day;
+  });
+  const formatDate = (day: Date) =>
+    `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, "0")}-${String(day.getDate()).padStart(2, "0")}`;
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-label="选择记录日期"
+        aria-expanded={open}
+        onClick={() => {
+          setMonth(new Date(selected.getFullYear(), selected.getMonth(), 1));
+          setOpen((current) => !current);
+        }}
+        className="flex h-11 w-full items-center justify-between rounded-xl border border-line bg-wash-top px-3 text-sm text-ink outline-none focus:ring-2 focus:ring-gold"
+      >
+        <span>{value}</span>
+        <CalendarDays className="size-5 text-ink" strokeWidth={1.8} />
+      </button>
+      {open ? (
+        <div className="absolute bottom-full z-20 mb-2 w-full rounded-2xl border border-line bg-card p-3 shadow-card">
+          <div className="mb-2 flex items-center justify-between">
+            <button
+              type="button"
+              aria-label="上个月"
+              onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}
+              className="flex size-8 items-center justify-center rounded-full text-brown-deep hover:bg-highlight"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+            <span className="text-sm font-medium text-brown-deep">
+              {month.getFullYear()}年{month.getMonth() + 1}月
+            </span>
+            <button
+              type="button"
+              aria-label="下个月"
+              onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}
+              className="flex size-8 items-center justify-center rounded-full text-brown-deep hover:bg-highlight"
+            >
+              <ChevronRight className="size-5" />
+            </button>
+          </div>
+          <div className="grid grid-cols-7 text-center text-[11px] text-hint">
+            {["一", "二", "三", "四", "五", "六", "日"].map((label) => (
+              <span key={label} className="py-1">{label}</span>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-y-1 text-center">
+            {days.map((day) => {
+              const dayValue = formatDate(day);
+              const isSelected = dayValue === value;
+              const inMonth = day.getMonth() === month.getMonth();
+              return (
+                <button
+                  key={dayValue}
+                  type="button"
+                  onClick={() => {
+                    onChange(dayValue);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "mx-auto flex size-9 items-center justify-center rounded-full text-sm",
+                    isSelected ? "bg-gold-bar font-medium text-brown-deep" : "text-ink hover:bg-highlight",
+                    !inMonth && !isSelected && "text-muted-fg/60",
+                  )}
+                >
+                  {day.getDate()}
+                </button>
+              );
+            })}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              const today = getGameDate();
+              onChange(today);
+              setMonth(new Date(`${today}T12:00:00`));
+              setOpen(false);
+            }}
+            className="mt-2 h-9 w-full rounded-lg bg-highlight text-xs text-brown-deep"
+          >
+            今天
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -273,7 +380,7 @@ export function AddRecordSheet({
         </Field>
       ) : null}
       <Field label="日期">
-        <TextInput type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <CalendarPicker value={date} onChange={setDate} />
       </Field>
     </Sheet>
   );
