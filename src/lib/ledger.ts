@@ -18,6 +18,37 @@ export function emptyFlows(): Record<ResourceKey, Flow> {
   };
 }
 
+/**
+ * Display legacy monthly-shop voucher records with the current source label.
+ * Older conversion rows share "兑换符传" with regular purchases, so identify
+ * monthly-shop rows by their paired 1600 白金币 : 10 符传 conversion.
+ */
+export function ledgerReasonLabels(entries: LedgerEntry[]) {
+  const monthlyShopIds = new Set<string>();
+  const legacyVoucherEntries = entries.filter((entry) => entry.reason === "兑换符传");
+
+  for (const entry of legacyVoucherEntries) {
+    const isMonthlyShopConversion = legacyVoucherEntries.some((other) => {
+      if (other === entry || other.date !== entry.date) return false;
+      return entry.key === "whiteGold" && entry.amount < 0 && other.key === "fuchuan" && other.amount > 0
+        ? Math.abs(entry.amount) === other.amount * 160
+        : entry.key === "fuchuan" && entry.amount > 0 && other.key === "whiteGold" && other.amount < 0
+          ? Math.abs(other.amount) === entry.amount * 160
+          : false;
+    });
+    if (isMonthlyShopConversion) monthlyShopIds.add(entry.id);
+  }
+
+  return new Map(
+    entries.map((entry) => [
+      entry.id,
+      entry.reason === "月卡符传" || monthlyShopIds.has(entry.id)
+        ? "月卡商店符传"
+        : entry.reason,
+    ]),
+  );
+}
+
 function addTo(flow: Flow, amount: number) {
   if (amount > 0) flow.income += amount;
   else if (amount < 0) flow.expense += -amount;
@@ -60,6 +91,7 @@ export function reasonBreakdown(
   side: "income" | "expense",
 ) {
   const bag = new Map<string, { value: number; count: number }>();
+  const reasonLabels = ledgerReasonLabels(entries);
   for (const e of entries) {
     if (e.key !== key) continue;
     if (side === "income" && e.amount <= 0) continue;
@@ -69,7 +101,7 @@ export function reasonBreakdown(
       side === "income" &&
       ["兑换白金币", "每日茱萸", "茱萸转化"].includes(e.reason)
         ? "茱萸转化"
-        : e.reason;
+        : reasonLabels.get(e.id) ?? e.reason;
     const value = Math.abs(e.amount);
     const cur = bag.get(reason) ?? { value: 0, count: 0 };
     cur.value += value;

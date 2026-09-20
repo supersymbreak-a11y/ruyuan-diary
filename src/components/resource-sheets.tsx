@@ -75,10 +75,10 @@ export function AddRecordSheet({
     sourceAmount: number,
     target: ResourceKey,
     targetAmount: number,
-    label: string,
+    reason: string,
   ) => {
-    addLedger({ key: source, amount: -sourceAmount, reason: `兑换${label}`, date });
-    addLedger({ key: target, amount: targetAmount, reason: `兑换${label}`, date });
+    addLedger({ key: source, amount: -sourceAmount, reason, date });
+    addLedger({ key: target, amount: targetAmount, reason, date });
   };
   const exchangeKind =
     key === "whiteGold" && side === "income" && reason === "茱萸转化"
@@ -87,13 +87,13 @@ export function AddRecordSheet({
         ? "tianji-income"
         : key === "fuchuan" && side === "income" && reason === "白金币购买"
           ? "fuchuan-income"
-          : key === "fuchuan" && side === "income" && reason === "月卡符传"
+          : key === "fuchuan" && side === "income" && reason === "月卡商店符传"
             ? "month-fuchuan-income"
       : side === "expense" && key === "zhuyu" && reason === "转化白金币"
         ? "zhuyu"
       : side === "expense" && key === "whiteGold" && reason === "天机符传"
         ? "tianji"
-        : side === "expense" && key === "whiteGold" && reason === "月卡符传"
+        : side === "expense" && key === "whiteGold" && reason === "月卡商店符传"
           ? "month-fuchuan"
           : side === "expense" && key === "whiteGold" && reason === "符传"
             ? "fuchuan"
@@ -142,7 +142,10 @@ export function AddRecordSheet({
             if (autoEnabled && exchangeKind && exchangeUnits.target > 0) {
               const source = exchangeKind === "zhuyu" || exchangeKind === "zhuyu-income" ? "zhuyu" : "whiteGold";
               const target = exchangeKind === "zhuyu" || exchangeKind === "zhuyu-income" ? "whiteGold" : exchangeKind.includes("tianji") ? "tianji" : "fuchuan";
-              applyConversion(source, exchangeUnits.source, target, exchangeUnits.target, target === "whiteGold" ? "白金币" : target === "tianji" ? "天机符传" : "符传");
+              const conversionReason = exchangeKind === "month-fuchuan" || exchangeKind === "month-fuchuan-income"
+                ? "月卡商店符传"
+                : `兑换${target === "whiteGold" ? "白金币" : target === "tianji" ? "天机符传" : "符传"}`;
+              applyConversion(source, exchangeUnits.source, target, exchangeUnits.target, conversionReason);
               onOpenChange(false);
               return;
             }
@@ -252,7 +255,7 @@ export function AddRecordSheet({
             </button>
           ) : exchangeKind === "month-fuchuan-income" ? (
             <button type="button" disabled={exchangeUnits.target < 10} onClick={() => setAutoEnabled((v) => !v)} className={cn("h-9 w-full rounded-lg px-2 text-xs text-brown-deep disabled:cursor-not-allowed disabled:opacity-40", autoEnabled ? "bg-gold-bar" : "bg-highlight")}>
-              {exchangeUnits.source || 1600} 白金币 → {exchangeUnits.target || 10} 符传（月卡）
+              {exchangeUnits.source || 1600} 白金币 → {exchangeUnits.target || 10} 月卡商店符传
             </button>
           ) : exchangeKind === "tianji" ? (
             <button type="button" disabled={exchangeUnits.target < 1} onClick={() => setAutoEnabled((v) => !v)} className={cn("h-9 w-full rounded-lg px-2 text-xs text-brown-deep disabled:cursor-not-allowed disabled:opacity-40", autoEnabled ? "bg-gold-bar" : "bg-highlight")}>
@@ -260,7 +263,7 @@ export function AddRecordSheet({
             </button>
           ) : exchangeKind === "month-fuchuan" ? (
             <button type="button" disabled={exchangeUnits.target < 1} onClick={() => setAutoEnabled((v) => !v)} className={cn("h-9 w-full rounded-lg px-2 text-xs text-brown-deep disabled:cursor-not-allowed disabled:opacity-40", autoEnabled ? "bg-gold-bar" : "bg-highlight")}>
-              {exchangeUnits.source || 1600} 白金币 → {exchangeUnits.target || 10} 符传（月卡）
+              {exchangeUnits.source || 1600} 白金币 → {exchangeUnits.target || 10} 月卡商店符传
             </button>
           ) : (
             <button type="button" disabled={exchangeUnits.target < 1} onClick={() => setAutoEnabled((v) => !v)} className={cn("h-9 w-full rounded-lg px-2 text-xs text-brown-deep disabled:cursor-not-allowed disabled:opacity-40", autoEnabled ? "bg-gold-bar" : "bg-highlight")}>

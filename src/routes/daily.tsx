@@ -14,7 +14,7 @@ import {
 import { AppHeader, HydrateGate, PhoneFrame, TabBar } from "@/components/shell";
 import { RESOURCE_META, type ResourceKey } from "@/lib/game-data";
 import { DIM_OPTIONS, formatMd, type StatDim } from "@/lib/game-date";
-import { asStock, filterEntries, groupByPeriod } from "@/lib/ledger";
+import { asStock, filterEntries, groupByPeriod, ledgerReasonLabels } from "@/lib/ledger";
 import { useNotes } from "@/lib/store";
 import { cn, formatInt } from "@/lib/utils";
 
@@ -64,6 +64,7 @@ function DailyPage() {
     () => filterEntries(ledger, { date }),
     [ledger, date],
   );
+  const reasonLabels = useMemo(() => ledgerReasonLabels(ledger), [ledger]);
   const periods = useMemo(() => groupByPeriod(ledger, dim), [ledger, dim]);
 
   const setTab = (next: TabId) => {
@@ -167,7 +168,7 @@ function DailyPage() {
                         {formatInt(Math.abs(e.amount))}
                       </span>
                       <span className="min-w-0 flex-1 truncate text-right text-gold-deep">
-                        {e.reason}
+                        {reasonLabels.get(e.id) ?? e.reason}
                       </span>
                       <button
                         type="button"
