@@ -66,7 +66,7 @@ function DailyPage() {
       return filterEntries(ledger, { date }).sort(
         (a, b) =>
           b.date.localeCompare(a.date) ||
-          insertionOrder.get(b.id)! - insertionOrder.get(a.id)!,
+          insertionOrder.get(a.id)! - insertionOrder.get(b.id)!,
       );
     },
     [ledger, date],
