@@ -96,12 +96,25 @@ export function reasonBreakdown(
     if (e.key !== key) continue;
     if (side === "income" && e.amount <= 0) continue;
     if (side === "expense" && e.amount >= 0) continue;
-    const reason =
-      key === "whiteGold" &&
+    const displayReason = reasonLabels.get(e.id) ?? e.reason;
+    const isWhiteGoldExchange =
       side === "income" &&
-      ["兑换白金币", "每日茱萸", "茱萸转化"].includes(e.reason)
-        ? "茱萸转化"
-        : reasonLabels.get(e.id) ?? e.reason;
+      ((key === "tianji" && ["白金币购买", "兑换天机符传"].includes(displayReason)) ||
+        (key === "fuchuan" && ["白金币购买", "月卡商店符传"].includes(displayReason)));
+    const isFuchuanConversionExpense =
+      key === "whiteGold" &&
+      side === "expense" &&
+      ["符传", "月卡商店符传"].includes(displayReason);
+    const reason =
+      isFuchuanConversionExpense
+        ? "兑换符传"
+        : isWhiteGoldExchange
+        ? "白金币兑换"
+        : key === "whiteGold" &&
+            side === "income" &&
+            ["兑换白金币", "每日茱萸", "茱萸转化"].includes(e.reason)
+          ? "茱萸转化"
+          : displayReason;
     const value = Math.abs(e.amount);
     const cur = bag.get(reason) ?? { value: 0, count: 0 };
     cur.value += value;
