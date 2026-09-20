@@ -61,7 +61,10 @@ function DailyPage() {
     [ledger],
   );
   const visible = useMemo(
-    () => filterEntries(ledger, { date }),
+    () =>
+      filterEntries(ledger, { date }).sort(
+        (a, b) => b.date.localeCompare(a.date) || a.at.localeCompare(b.at),
+      ),
     [ledger, date],
   );
   const reasonLabels = useMemo(() => ledgerReasonLabels(ledger), [ledger]);
