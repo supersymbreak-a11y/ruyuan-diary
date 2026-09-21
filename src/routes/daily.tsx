@@ -23,6 +23,7 @@ type TabId = "ledger" | "stats";
 export const Route = createFileRoute("/daily")({
   validateSearch: (s: Record<string, unknown>) => ({
     tab: s.tab === "stats" ? ("stats" as const) : ("ledger" as const),
+    dim: s.dim === "month" ? ("month" as const) : s.dim === "year" ? ("year" as const) : ("week" as const),
   }),
   component: DailyRoute,
 });
@@ -41,7 +42,7 @@ function DailyRoute() {
 
 function DailyPage() {
   const navigate = useNavigate();
-  const { tab } = Route.useSearch();
+  const { tab, dim } = Route.useSearch();
   const nickname = useNotes((s) => s.nickname);
   const resources = useNotes((s) => s.resources);
   const ledger = useNotes((s) => s.ledger);
@@ -54,7 +55,6 @@ function DailyPage() {
   const [dateOpen, setDateOpen] = useState(false);
   const [dimOpen, setDimOpen] = useState(false);
   const [date, setDate] = useState<string | null>(null);
-  const [dim, setDim] = useState<StatDim>("week");
 
   const dates = useMemo(
     () => [...new Set(ledger.map((e) => e.date))].sort().reverse(),
@@ -75,7 +75,11 @@ function DailyPage() {
   const periods = useMemo(() => groupByPeriod(ledger, dim), [ledger, dim]);
 
   const setTab = (next: TabId) => {
-    void navigate({ to: "/daily", search: { tab: next }, replace: true });
+    void navigate({ to: "/daily", search: { tab: next, dim }, replace: true });
+  };
+
+  const setDim = (next: StatDim) => {
+    void navigate({ to: "/daily", search: { tab, dim: next }, replace: true });
   };
 
   const openStat = (key: ResourceKey, period?: string) => {

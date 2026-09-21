@@ -29,9 +29,10 @@ export const Route = createFileRoute("/daily_/stat/$key")({
 
 function StatRoute() {
   const { key } = Route.useParams();
+  const { dim } = Route.useSearch();
   const navigate = Route.useNavigate();
   const goBack = () =>
-    void navigate({ to: "/daily", search: { tab: "stats" } });
+    void navigate({ to: "/daily", search: { tab: "stats", dim } });
 
   if (!isResourceKey(key)) {
     return (
