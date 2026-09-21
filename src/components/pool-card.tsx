@@ -36,14 +36,8 @@ export function PoolCard({
               src={coverSrc(pool.cover)}
               alt=""
               className={cn(
-                "h-full w-full origin-left scale-[1.04] object-cover",
-                pool.name === "契阔谈宴"
-                  ? "origin-left scale-[1.04_1.085] object-left"
-                  : pool.name === "欺天罔地"
-                  ? "origin-left -translate-x-3 scale-[1.08] object-left"
-                  : pool.name === "弹剑酿花"
-                    ? "object-left"
-                    : "object-left",
+                "h-full w-full origin-left object-cover object-left",
+                pool.name === "欺天罔地" ? "-translate-x-3 scale-[1.08]" : "scale-[1.04]",
               )}
             />
           ) : null}

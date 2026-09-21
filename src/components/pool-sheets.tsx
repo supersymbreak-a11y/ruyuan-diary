@@ -653,7 +653,6 @@ export function RecruitmentRecordSheet({
                           alt=""
                           className={cn(
                             "h-full w-full origin-left scale-[1.04] object-cover object-left",
-                            pool.name === "契阔谈宴" && "scale-[1.04_1.085]",
                           )}
                         />
                       ) : null}
