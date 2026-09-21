@@ -648,7 +648,14 @@ export function RecruitmentRecordSheet({
                   <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 pt-3">
                     <div className="relative h-[108px] overflow-hidden rounded-2xl bg-neutral-400 shadow-card">
                       {isCustomCover(pool.cover) ? (
-                        <img src={coverSrc(pool.cover)} alt="" className="h-full w-full origin-left scale-[1.04] object-cover object-left" />
+                        <img
+                          src={coverSrc(pool.cover)}
+                          alt=""
+                          className={cn(
+                            "h-full w-full origin-left scale-[1.04] object-cover object-left",
+                            pool.name === "契阔谈宴" && "scale-[1.04_1.085]",
+                          )}
+                        />
                       ) : null}
                       <div className="pool-cover-shade absolute inset-0" />
                       <textarea

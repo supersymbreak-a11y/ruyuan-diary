@@ -37,7 +37,9 @@ export function PoolCard({
               alt=""
               className={cn(
                 "h-full w-full origin-left scale-[1.04] object-cover",
-                pool.name === "欺天罔地"
+                pool.name === "契阔谈宴"
+                  ? "origin-left scale-[1.04_1.085] object-left"
+                  : pool.name === "欺天罔地"
                   ? "origin-left -translate-x-3 scale-[1.08] object-left"
                   : pool.name === "弹剑酿花"
                     ? "object-left"
