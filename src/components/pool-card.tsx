@@ -37,7 +37,11 @@ export function PoolCard({
               alt=""
               className={cn(
                 "h-full w-full origin-left object-cover object-left",
-                pool.name === "欺天罔地" ? "-translate-x-3 scale-[1.08]" : "scale-[1.04]",
+                pool.name === "欺天罔地"
+                  ? "-translate-x-3 scale-[1.08]"
+                  : pool.name === "辕门遣将"
+                    ? "scale-100"
+                    : "scale-[1.04]",
               )}
             />
           ) : null}

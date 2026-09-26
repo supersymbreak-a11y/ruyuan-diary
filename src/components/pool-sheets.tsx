@@ -652,7 +652,8 @@ export function RecruitmentRecordSheet({
                           src={coverSrc(pool.cover)}
                           alt=""
                           className={cn(
-                            "h-full w-full origin-left scale-[1.04] object-cover object-left",
+                            "h-full w-full origin-left object-cover object-left",
+                            pool.name === "辕门遣将" ? "scale-100" : "scale-[1.04]",
                           )}
                         />
                       ) : null}
