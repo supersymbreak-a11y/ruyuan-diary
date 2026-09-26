@@ -119,7 +119,7 @@ export const DEFAULT_POOLS = [
     pity: 0,
     upPity: 0,
     guaranteedUp: false,
-    cover: "/covers/yuan-men-qian-jiang-v2.png",
+    cover: "/covers/yuan-men-qian-jiang-v3.png",
     archived: false,
     createdAt: "2026-09-16T00:00:00.000Z",
   },
