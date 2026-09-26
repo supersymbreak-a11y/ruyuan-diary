@@ -762,7 +762,7 @@ function portraitClassName(name: string) {
   return cn(
     "h-full w-full object-cover object-center",
     name === "曹植"
-      ? "scale-[1.08] -translate-x-1 -translate-y-1"
+      ? "scale-[1.2] -translate-x-2 -translate-y-1"
       : name === "刘豹"
         ? "origin-top scale-[1.12]"
         : undefined,
