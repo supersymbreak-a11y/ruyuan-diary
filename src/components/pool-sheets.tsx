@@ -611,7 +611,7 @@ export function RecruitmentRecordSheet({
               <div className="flex flex-1 flex-col justify-center px-7 pb-10">
                 <div className="relative mx-auto flex aspect-[3/4] w-40 flex-col overflow-hidden rounded-2xl border border-gold-deep/60 bg-wash-top text-gold-deep">
                   <button type="button" aria-label="打开密探列表" onClick={() => setAgentPickerOpen(true)} className="relative min-h-0 flex-1 overflow-hidden">
-                    {agent.trim() ? <img src={portraitSrc(agent)} alt={`${agent}立绘`} className="h-full w-full object-cover" /> : <Plus className="absolute inset-0 m-auto size-10" strokeWidth={1.5} />}
+                    {agent.trim() ? <img src={portraitSrc(agent)} alt={`${agent}立绘`} className={portraitClassName(agent)} /> : <Plus className="absolute inset-0 m-auto size-10" strokeWidth={1.5} />}
                   </button>
                   <TextInput aria-label="密探名称" value={agent} onChange={(event) => setAgent(event.target.value)} placeholder="请输入密探名称" maxLength={30} className="h-10 shrink-0 rounded-none border-0 bg-card/90 text-center text-sm" />
                 </div>
@@ -758,6 +758,17 @@ const AGENT_FILTER_TAGS: Record<string, { elements: string[]; jobs: string[] }> 
   司马徽: { elements: ["阴"], jobs: ["诡道"] }, 黄盖: { elements: ["阴"], jobs: ["诡道"] }, 张闿: { elements: ["阴"], jobs: ["诡道"] }, 张鲁: { elements: ["阴"], jobs: ["诡道"] }, 葛洪: { elements: ["阴"], jobs: ["诡道"] }, 贾诩: { elements: ["阴"], jobs: ["诡道"] }, 法正: { elements: ["阴"], jobs: ["神纪"] },
 };
 
+function portraitClassName(name: string) {
+  return cn(
+    "h-full w-full object-cover object-center",
+    name === "曹植"
+      ? "scale-[1.08] -translate-x-1 -translate-y-1"
+      : name === "刘豹"
+        ? "origin-top scale-[1.12]"
+        : undefined,
+  );
+}
+
 function AgentPickerSheet({
   open,
   onClose,
@@ -818,7 +829,7 @@ function AgentPickerSheet({
               {agents.map((name) => (
                 <button key={name} type="button" onClick={() => onSelect(name)} className="group">
                   <div className="aspect-[3/4] overflow-hidden rounded-lg border-2 border-gold-deep/70 bg-wash-top shadow-card">
-                    <img src={portraitSrc(name)} alt={`${name}立绘`} className="h-full w-full rounded-lg object-cover object-center" />
+                    <img src={portraitSrc(name)} alt={`${name}立绘`} className={portraitClassName(name)} />
                   </div>
                   <div className="mt-1 rounded-full border border-gold-deep/60 px-1 py-0.5 text-center text-xs text-brown-deep group-active:bg-highlight">{name}</div>
                 </button>
