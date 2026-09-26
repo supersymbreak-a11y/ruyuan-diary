@@ -711,7 +711,7 @@ export function RecruitmentRecordSheet({
                         >
                           <Plus className="size-9" strokeWidth={1.5} />
                         </button>
-                        {history.map((drop) => <HistoryCard key={drop.id} drop={drop} onClick={() => setSelectedDrop(drop)} />)}
+                        {history.map((drop) => <HistoryCard key={drop.id} drop={drop} matchAgentListCrop onClick={() => setSelectedDrop(drop)} />)}
                       </div>
                       {history.length === 0 ? (
                         <p className="py-7 text-center text-sm text-hint">先添加第一位抽到的绝密密探吧</p>
