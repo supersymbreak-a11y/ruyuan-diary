@@ -365,13 +365,7 @@ function HistoryCard({ drop, onClick, interactive = true }: { drop: HistoryDrop;
   );
   return interactive ? (
     <button type="button" onClick={onClick} aria-label={`查看或删除${drop.name}的招募记录`} className={className}>
-      {drop.name === "曹植" ? (
-        <span className="absolute inset-0 overflow-hidden rounded-xl">
-          <img src={portraitSrc(drop.name)} alt={`${drop.name}立绘`} className={portraitClassName(drop.name)} />
-        </span>
-      ) : (
-        <img src={portraitSrc(drop.name)} alt={`${drop.name}立绘`} className="absolute inset-0 h-full w-full rounded-xl object-cover" />
-      )}
+      <img src={portraitSrc(drop.name)} alt={`${drop.name}立绘`} className="absolute inset-0 h-full w-full rounded-xl object-cover" />
       <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-card shadow-card">
         {drop.pityNumber}
       </span>
@@ -386,13 +380,7 @@ function HistoryCard({ drop, onClick, interactive = true }: { drop: HistoryDrop;
     </button>
   ) : (
     <div className={className} aria-hidden="true">
-      {drop.name === "曹植" ? (
-        <span className="absolute inset-0 overflow-hidden rounded-xl">
-          <img src={portraitSrc(drop.name)} alt="" className={portraitClassName(drop.name)} />
-        </span>
-      ) : (
-        <img src={portraitSrc(drop.name)} alt="" className="absolute inset-0 h-full w-full rounded-xl object-cover" />
-      )}
+      <img src={portraitSrc(drop.name)} alt="" className="absolute inset-0 h-full w-full rounded-xl object-cover" />
       <span className="absolute -left-1 -top-1 z-10 min-w-7 rounded-md bg-gold-bar px-1 py-0.5 text-center text-sm font-semibold tabular text-card shadow-card">
         {drop.pityNumber}
       </span>
@@ -773,11 +761,7 @@ const AGENT_FILTER_TAGS: Record<string, { elements: string[]; jobs: string[] }> 
 function portraitClassName(name: string) {
   return cn(
     "h-full w-full object-cover object-center",
-    name === "曹植"
-      ? "scale-[1.2] -translate-x-[4%] -translate-y-[1%]"
-      : name === "刘豹"
-        ? "origin-top scale-[1.12]"
-        : undefined,
+    name === "刘豹" ? "origin-top scale-[1.12]" : undefined,
   );
 }
 
