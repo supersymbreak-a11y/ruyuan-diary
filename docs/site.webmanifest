@@ -1,0 +1,24 @@
+{
+  "name": "如鸢手札",
+  "short_name": "如鸢手札",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf6ea",
+  "theme_color": "#f3dca8",
+  "icons": [
+    {
+      "src": "icons/ruyuan-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/ruyuan-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
