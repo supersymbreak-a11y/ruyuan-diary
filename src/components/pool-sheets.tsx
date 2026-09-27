@@ -771,14 +771,7 @@ const AGENT_FILTER_TAGS: Record<string, { elements: string[]; jobs: string[] }> 
 };
 
 function portraitClassName(name: string) {
-  return cn(
-    "h-full w-full object-cover object-center",
-    name === "曹植"
-      ? "scale-[1.2] -translate-x-[4%] -translate-y-[1%]"
-      : name === "刘豹"
-        ? "origin-top scale-[1.12]"
-        : undefined,
-  );
+  return cn("h-full w-full object-cover object-center", name === "刘豹" ? "origin-top scale-[1.12]" : undefined);
 }
 
 function AgentPickerSheet({
