@@ -406,6 +406,7 @@ export const LEDGER_REASONS: {
   { id: "充值", side: "income", keys: ["whiteGold", "tianji", "fuchuan"] },
   { id: "成长基金", side: "income", keys: ["whiteGold"] },
   { id: "sp碎片分解", side: "income", keys: ["whiteGold"] },
+  { id: "符传月卡", side: "income", keys: ["fuchuan"] },
   { id: "天机符传", side: "expense", keys: ["whiteGold"] },
   { id: "符传", side: "expense", keys: ["whiteGold"] },
   { id: "月卡商店符传", side: "expense", keys: ["whiteGold"] },
