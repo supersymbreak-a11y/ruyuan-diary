@@ -8,14 +8,17 @@ import { cn } from "@/lib/utils";
 import { BackupNavItem } from "./backup-nav";
 
 export function HydrateGate({ children }: { children: ReactNode }) {
-  if (import.meta.env.MODE === "github-pages") return <>{children}</>;
-
   const [hydrated, setHydrated] = useState(() => useNotes.persist.hasHydrated());
 
   useEffect(() => {
     let active = true;
+    let calendarTimer: ReturnType<typeof setInterval> | undefined;
     const finish = () => {
-      if (active) setHydrated(true);
+      if (!active) return;
+      setHydrated(true);
+      if (!calendarTimer) {
+        calendarTimer = setInterval(() => useNotes.getState().tickCalendar(), 30_000);
+      }
     };
     if (useNotes.persist.hasHydrated()) finish();
     else {
@@ -24,12 +27,12 @@ export function HydrateGate({ children }: { children: ReactNode }) {
       return () => {
         active = false;
         unsubscribe();
+        if (calendarTimer) clearInterval(calendarTimer);
       };
     }
-    const t = setInterval(() => useNotes.getState().tickCalendar(), 30_000);
     return () => {
       active = false;
-      clearInterval(t);
+      if (calendarTimer) clearInterval(calendarTimer);
     };
   }, []);
   return hydrated ? <>{children}</> : null;
