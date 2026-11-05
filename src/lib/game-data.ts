@@ -307,6 +307,8 @@ export function portraitSrc(name: string) {
       "太史慈": "/portraits/taishi-ci.png",
       "郭女王": "/portraits/guo-nvwang.png",
       "庞德": "/portraits/pang-de.png",
+      "酆公珠": "/portraits/feng-gong-zhu.png",
+      "酆公玖": "/portraits/feng-gong-jiu.png",
     };
   if (bundledPortraits[safeName]) {
     // Public assets live under the Vite base path on GitHub Pages
