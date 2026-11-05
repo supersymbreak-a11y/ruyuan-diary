@@ -23,7 +23,7 @@ const STATIC_AI_BANNER_NAMES = new Set([
   "壑林邀月", "天封孤狼", "天道不逾", "奉天华盖", "契阔谈宴", "异才奇士", "弓箭江东",
   "弹剑酿花", "弹香展骥", "彀弓衔刃", "形气复生", "形谍成光", "暮燕翻雷", "桓桓先征",
   "欺天罔地", "深藏北斗", "游说贤士", "绮花隐豹", "腾陵张胆", "英徽弥亮", "蛇蟒之蛰",
-  "长生之术", "珠渊玉水", "白日昭只", "织囊画诗", "金相玉质", "铁弦千钧", "风兴云蒸", "谨司天英", "动如雷霆",
+  "长生之术", "珠渊玉水", "白日昭只", "织囊画诗", "金相玉质", "铁弦千钧", "风兴云蒸", "谨司天英", "动如雷霆", "珠玑琼玖",
 ]);
 
 export function staticAiCoverForPool(name: string) {
@@ -135,6 +135,18 @@ export const DEFAULT_POOLS = [
     archived: false,
     createdAt: "2026-09-15T00:00:00.000Z",
   },
+  {
+    id: "limited-zhu-ji-qiong-jiu",
+    name: "珠玑琼玖",
+    type: "limited" as const,
+    upNames: ["酆公珠", "酆公玖"],
+    pity: 0,
+    upPity: 0,
+    guaranteedUp: false,
+    cover: "/covers/ai/珠玑琼玖.png",
+    archived: false,
+    createdAt: "2026-11-05T00:00:00.000Z",
+  },
 ];
 
 export const SSR_AGENTS = [
@@ -209,6 +221,8 @@ export const SSR_AGENTS = [
   "简雍",
   "吕布",
   "曹丕",
+  "酆公珠",
+  "酆公玖",
 ];
 
 /**
