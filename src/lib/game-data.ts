@@ -147,6 +147,18 @@ export const DEFAULT_POOLS = [
     archived: false,
     createdAt: "2026-11-05T00:00:00.000Z",
   },
+  {
+    id: "limited-chen-xi-zai-zhou",
+    name: "陈锡载周",
+    type: "limited" as const,
+    upNames: ["陈纪", "周忠"],
+    pity: 0,
+    upPity: 0,
+    guaranteedUp: false,
+    cover: "/covers/chen-xi-zai-zhou.png",
+    archived: false,
+    createdAt: "2026-11-12T00:00:00.000Z",
+  },
 ];
 
 export const SSR_AGENTS = [
@@ -223,6 +235,8 @@ export const SSR_AGENTS = [
   "曹丕",
   "酆公珠",
   "酆公玖",
+  "陈纪",
+  "周忠",
 ];
 
 /**
